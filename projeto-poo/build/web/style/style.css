@@ -1,0 +1,39 @@
+body {
+    background-color: #363636;
+}
+
+/* Fundo do formulário */
+.bg-form {
+    background-color: #2d2d2d;
+    color: white;
+    border-radius: 12px;
+}
+
+/* Estilo dos inputs */
+.form-control {
+    background-color: #444;
+    border: none;
+    color: white;
+    margin-bottom: 10px;
+}
+
+.form-control:focus {
+    background-color: #555;
+    color: white;
+    border: 1px solid #FF894C;
+    box-shadow: none;
+}
+
+/* Botão customizado */
+.btn-custom {
+    background-color: #DC2F2F;
+    border: none;
+    padding: 10px 20px;
+    font-weight: bold;
+    border-radius: 8px;
+    transition: 0.3s;
+}
+
+.btn-custom:hover {
+    background-color: #F7374F;
+}
