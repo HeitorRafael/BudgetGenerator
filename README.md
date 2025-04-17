@@ -1,7 +1,9 @@
 # BudgetGenerator
 
 🧑‍💻 Manual do Usuário – Sistema Gerador de Orçamentos com IA
+
 📌 Objetivo do Sistema
+
 Este sistema tem como objetivo facilitar a geração de orçamentos personalizados com a ajuda de inteligência artificial. Ele permite que usuários criem orçamentos para produtos ou serviços de forma rápida e inteligente, a partir de formulários simples.
 
 🏠 Acessando o Sistema
