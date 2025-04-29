@@ -1,0 +1,35 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : 29 de abr. de 2025, 16:02:49
+    Author     : raffinoh
+*/
+        body {
+            background-color: #1e1e1e; /* fundo escuro */
+            color: white;
+        }
+        .nav-link {
+            color: white;
+            margin-right: 20px;
+        }
+        .nav-link:hover {
+            color: #ff0000; /* vermelho ao passar o mouse */
+        }
+        .user-info {
+            text-align: center;
+        }
+        .user-info img {
+            border-radius: 10px;
+            width: 200px;
+            height: auto;
+        }
+        .logo img {
+            max-width: 150px;
+        }
+        .main-title {
+            font-size: 3rem;
+            font-weight: bold;
+            color: white;
+        }
