@@ -1,0 +1,90 @@
+body {
+    background-color: #343a40; /* Cor de fundo escura */
+    color: #fff;
+    padding-top: 20px; /* Espaçamento superior */
+}
+
+.historico-container {
+    max-width: 800px; /* Largura máxima do container */
+    margin: 20px auto; /* Centralizar com margem */
+    background-color: #495057; /* Cor de fundo do container */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.historico-titulo {
+    color: #fff;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.lista-orcamentos {
+    list-style: none;
+    padding: 0;
+}
+
+.item-orcamento {
+    background-color: #343a40; /* Cor de fundo dos itens da lista */
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column; /* Empilhar os elementos verticalmente */
+    align-items: stretch; /* Esticar os elementos na largura */
+}
+
+.info-orcamento {
+    display: flex;
+    justify-content: space-between; /* Alinhar nome/data à esquerda e ações à direita na mesma linha */
+    align-items: center; /* Alinhar verticalmente nome/data com as ações */
+}
+
+.nome-orcamento {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.data-criacao {
+    color: #6c757d;
+    font-size: 0.9rem;
+}
+
+.acoes-orcamento {
+    display: flex;
+    align-items: center; /* Alinhar verticalmente os botões */
+    justify-content: flex-end; /* Alinhar os botões à direita */
+    margin-top: 10px; /* Adicionar espaço acima dos botões */
+}
+
+.acoes-orcamento button {
+    background-color: #dc3545; /* Cor dos botões de ação */
+    color: #fff;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    margin-left: 10px;
+}
+
+.acoes-orcamento button:hover {
+    background-color: #c82333;
+}
+
+/* Estilos para os detalhes expandidos */
+.detalhes-expandidos {
+    padding: 10px 20px;
+    background-color: #495057; /* Cor de fundo similar ao container */
+    border-radius: 0 0 4px 4px;
+    margin-top: 10px; /* Adicionar espaço acima dos detalhes */
+    display: none; /* Inicialmente escondido */
+    color: #fff;
+    font-size: 0.9rem;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.detalhes-expandidos p {
+    margin-bottom: 5px;
+}
