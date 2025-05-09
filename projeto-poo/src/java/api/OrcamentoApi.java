@@ -21,23 +21,6 @@ import org.json.JSONObject;
 @WebServlet(name = "OrcamentoApi", urlPatterns = {"/OrcamentoApi"})
 public class OrcamentoApi extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-           
-       
-        }
-    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -51,7 +34,6 @@ public class OrcamentoApi extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
     }
 
     /**
@@ -66,20 +48,47 @@ public class OrcamentoApi extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        //Le a requisição do formato JSON, e junta linha por linha
-        StringBuilder sb = new StringBuilder();
-        BufferedReader reader = request.getReader();
-        String line;
-        while ((line = reader.readLine()) != null) {
-            sb.append(line);
-        }
-
-        //Transformar a string em JSON
-        JSONObject requestBody = new JSONObject(sb.toString());
-        String prompt = requestBody.getString("prompt");
+        //Recebe os dados do formulário
+        String produto = request.getParameter("produto_servico");
+        String materiais = request.getParameter("materiais");
+        String tempo = request.getParameter("tempo");
+        String maoDeObra = request.getParameter("mao_de_obra");
+        String lucro = request.getParameter("lucro");
+        String custos = request.getParameter("custos");
         
-        //Define o tipo da resposta como JSON para a requisição
+        //Criando um objeto JSON
+        JSONObject json = new JSONObject();
+        
+        //Colocando os inputs dentro do JSON
+        json.put("produto", produto);
+        json.put("materiais", materiais);
+        json.put("tempo", tempo);
+        json.put("maoDeObra", maoDeObra);
+        json.put("lucro", lucro);
+        json.put("custos", custos);
+        
+        //Prompt para a IA
+        String prompt = "Gere um orçamento detalhado com base nestes dados:\n" +
+                "Produto/Serviço: " + produto + "\n" +
+                "Materiais necessários: " + materiais + "\n" +
+                "Tempo estimado: " + tempo + " horas\n" +
+                "Valor da mão de obra: R$" + maoDeObra + "\n" +
+                "Margem de lucro: " + lucro + "%\n" +
+                "Custos adicionais: R$" + custos + "\n\n" +
+                "Por favor, calcule o valor total incluindo todos estes custos " +
+                "e acrescentando a margem de lucro informada.";
+
+        //Respostas para a IA
+        JSONObject resposta = new JSONObject();
+        resposta.put("dados", json);
+        resposta.put("prompt", prompt);
+        
+        System.out.println("Dados recebidos");
+        
+        //Configuração http
         response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter().write(resposta.toString());
         
     }
 
