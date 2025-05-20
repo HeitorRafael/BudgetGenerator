@@ -13,8 +13,11 @@ import java.util.UUID;
  *
  * @author raffinoh
  */
-public class user {
-    public class User {
+public class Usuario {
+
+    public Usuario(String nome, String email, String usuario, String senha) {
+    }
+    public class Usuario{
     private String id;
     private String login;
     private String senha;
@@ -22,7 +25,7 @@ public class user {
     private List<orcamento> orcamentos;
     private boolean logado;
 
-    public User(String login, String senha) {
+    public Usuario(String login, String senha) {
         this.id = UUID.randomUUID().toString();
         this.login = login;
         this.senha = senha;
