@@ -3,13 +3,43 @@
 Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
 Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit this template
 -->
-<html>
-    <head>
-        <title>TODO supply a title</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    </head>
-    <body>
-        <div>TODO write content</div>
-    </body>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Cadastro</title>
+    <link rel="stylesheet" href="style/index.css">
+</head>
+<body>
+
+<div class="container" x-data="{ showLogin: true }">
+    <div class="form-section">
+
+        <!-- Cadastro -->
+        <div class="form-box">
+            <h2>Cadastro</h2>
+            <form action="CadastroServlet" method="post">
+                <input type="text" name="nome" placeholder="Nome completo" required>
+                <input type="email" name="email" placeholder="Email" required>
+                <input type="text" name="usuario" placeholder="Usuário" required>
+                <input type="password" name="senha" placeholder="Senha" required>
+                <button type="submit">Cadastrar</button>
+            </form>
+        </div>
+        
+        <!-- Login -->
+        <div class="form-box">
+            <h2>Login</h2>
+            <form action="LoginServlet" method="post">
+                <input type="text" name="usuario" placeholder="Usuário" required>
+                <input type="password" name="senha" placeholder="Senha" required>
+                <button type="submit">EFDDntrar</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Alpine.js -->
+<script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+</body>
 </html>
