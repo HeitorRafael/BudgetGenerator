@@ -14,16 +14,18 @@ import java.util.UUID;
  * @author raffinoh
  */
 public class Usuario {
-
-    public Usuario(String nome, String email, String usuario, String senha) {
-    }
-    public class Usuario{
+    
     private String id;
     private String login;
     private String senha;
     private String fotoPerfil;
     private List<orcamento> orcamentos;
     private boolean logado;
+
+    public Usuario(String nome, String email, String usuario, String senha) {
+    }
+
+
 
     public Usuario(String login, String senha) {
         this.id = UUID.randomUUID().toString();
@@ -115,6 +117,4 @@ public class Usuario {
     public String getId() {
         return id;
     }
-}
-    
 }
