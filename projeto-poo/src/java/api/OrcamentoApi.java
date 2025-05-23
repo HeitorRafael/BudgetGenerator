@@ -54,46 +54,72 @@ public class OrcamentoApi extends HttpServlet {
         response.setContentType("application/json");
         response.setHeader("Access-Control-Allow-Origin", "*");
 
-        //Recebe os dados do formulário
-        String produto = request.getParameter("produto_servico");
-        String materiais = request.getParameter("materiais");
-        String tempo = request.getParameter("tempo");
-        String maoDeObra = request.getParameter("mao_de_obra");
-        String lucro = request.getParameter("lucro");
-        String custos = request.getParameter("custos");
-
-        //Criando um objeto JSON (opcional - você pode remover se não estiver usando)
-        JSONObject json = new JSONObject();
-        json.put("produto", produto);
-        json.put("materiais", materiais);
-        json.put("tempo", tempo);
-        json.put("maoDeObra", maoDeObra);
-        json.put("lucro", lucro);
-        json.put("custos", custos);
-
-        //Prompt para a IA
-        String prompt = "Você é um assistente que cria orçamentos para pequenos negócios. Gere um orçamento claro e profissional com os dados abaixo:\n\n" +
-        "Produto ou serviço: " + produto + "\n" +
-        "Materiais: " + materiais + "\n" +
-        "Tempo estimado de trabalho: " + tempo + " horas\n" +
-        "Valor da mão de obra: R$" + maoDeObra + "\n" +
-        "Margem de lucro desejada: " + lucro + "%\n" +
-        "Custos adicionais: R$" + custos + "\n\n" +
-        "Calcule o valor total final do orçamento e explique brevemente como ele foi calculado.";
-
-        //Chamada da IA
+        //Pega o tipo do formulário
+        String tipo = request.getParameter("tipo");
+        
         try{
-            String respostaIA = GeminiAPIClient.enviarPrompt(prompt);
+            //Criação de um objeto json com os dados recebidos
+             JSONObject json = new JSONObject();
+             
+             //Monta o prompt especifico para o tipo do formulario
+             String prompt;
+             if("produto".equals(tipo)){
+                String nome = request.getParameter("nome");
+                String materiais = request.getParameter("materiais");
+                String custo = request.getParameter("custo");
+                String lucro = request.getParameter("lucro");
+                 
+                json.put("tipo", tipo);
+                json.put("nome", nome);
+                json.put("materiais", materiais);
+                json.put("custo", custo);
+                json.put("lucro", lucro);
+                
+                // Prompt para produtos
+                prompt = 
+                "Você é um assistente que cria orçamentos para PRODUTOS. Gere um orçamento com:\n\n" +
+                "Nome do produto: " + nome + "\n" +
+                "Materiais utilizados: " + materiais + "\n" +
+                "Custo de produção: R$" + custo + "\n" +
+                "Margem de lucro desejada: " + lucro + "%\n\n" +
+                "Calcule o preço final de venda e explique o cálculo.";
+              
+             }else{
+                 
+                // Obtém parâmetros específicos de serviço
+                String descricao = request.getParameter("descricao");
+                String horas = request.getParameter("horas");
+                String valorHora = request.getParameter("valor_hora");
+                String custosExtras = request.getParameter("custos_extras");
 
-            //Cria o JSON de resposta final
-            JSONObject resposta = new JSONObject();
-            resposta.put("resposta", respostaIA);
+                json.put("tipo", tipo);
+                json.put("descricao", descricao);
+                json.put("horas", horas);
+                json.put("valor_hora", valorHora);
+                json.put("custos_extras", custosExtras);
 
-            //Configuração http e envia resposta
-            response.getWriter().write(resposta.toString());
+                // Prompt para serviços
+                prompt = 
+                "Você é um assistente que cria orçamentos para SERVIÇOS. Gere um orçamento com:\n\n" +
+                "Descrição do serviço: " + descricao + "\n" +
+                "Tempo estimado: " + horas + " horas\n" +
+                "Valor por hora: R$" + valorHora + "\n" +
+                "Custos extras: R$" + custosExtras + "\n\n" +
+                "Calcule o valor total e explique o cálculo.";
+      
+             }
+             
+                String respostaIA = GeminiAPIClient.enviarPrompt(prompt);
 
-        } catch (Exception e) {
-            e.printStackTrace();
+                //Cria o JSON de resposta final
+                JSONObject resposta = new JSONObject();
+                resposta.put("resposta", respostaIA);
+
+                //Configuração http e envia resposta
+                response.getWriter().write(resposta.toString());
+        }catch(Exception e){
+            
+             e.printStackTrace();
 
             //Cria JSON de erro
             JSONObject error = new JSONObject();
