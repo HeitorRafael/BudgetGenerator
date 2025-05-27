@@ -107,22 +107,22 @@ function toggleDetalhes(orcamentoId) {
 }
 
 function excluirOrcamento(orcamentoId) {
-    const botaoExcluir = event.target; // Obtém o elemento do botão que foi clicado
-    const itemOrcamento = botaoExcluir.closest('.item-orcamento'); // Encontra o ancestral mais próximo com a classe 'item-orcamento'
+    if (!confirm("Tem certeza que deseja excluir este orçamento?")) return;
 
-    if (itemOrcamento && confirm(`Tem certeza que deseja excluir o orçamento "${itemOrcamento.querySelector('.nome-orcamento').textContent}"?`)) {
-        itemOrcamento.remove(); // Remove o elemento 'li' (item do orçamento) do DOM
-        alert(`Orçamento "${itemOrcamento.querySelector('.nome-orcamento').textContent}" excluído.`);
-        // Se você tiver uma mensagem de "Nenhum orçamento encontrado", pode verificar
-        // se a lista ficou vazia e exibir a mensagem novamente, se necessário.
-        const listaOrcamentos = document.getElementById('lista-de-orcamentos');
-        if (listaOrcamentos.children.length === 0) {
-            const mensagemVazio = document.getElementById('mensagem-vazio');
-            if (mensagemVazio) {
-                mensagemVazio.style.display = 'block';
-            }
+    fetch('/projeto-poo/ExcluirOrcamento', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: 'id=' + encodeURIComponent(orcamentoId)
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.sucesso) {
+            alert('Orçamento excluído com sucesso.');
+            location.reload();
+        } else {
+            alert('Erro: ' + (data.erro || 'Tente novamente.'));
         }
-    }
+    });
 }
 
 // script para remover marca d'água do PDF

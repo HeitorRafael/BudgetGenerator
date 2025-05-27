@@ -49,4 +49,14 @@ public class OrcamentoDAO {
             stmt.executeUpdate();
         }
     }
+
+    // Exclui um orçamento pelo ID
+    public void excluir(String orcamentoId) throws SQLException {
+        String sql = "DELETE FROM orcamentos WHERE id = ?";
+        try (Connection conn = utilities.DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, orcamentoId);
+            stmt.executeUpdate();
+        }
+    }
 }
