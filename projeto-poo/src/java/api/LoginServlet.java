@@ -4,13 +4,13 @@
  */
 package api;
 
-import java.io.IOException;
+import dao.UsuarioDAO;
+import models.Usuario;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-
+import jakarta.servlet.http.*;
+import java.io.IOException;
 
 /**
  *
@@ -21,16 +21,25 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        String usuario = request.getParameter("usuario");
+        String login = request.getParameter("usuario");
         String senha = request.getParameter("senha");
 
-        // Aqui você deveria consultar no banco de dados, mas vamos simular:
-        if ("admin".equals(usuario) && "1234".equals(senha)) {
-            request.getSession().setAttribute("usuario", usuario);
-            response.sendRedirect("home.html");
-        } else {
-            response.sendRedirect("index.html?erro=login");
+        try {
+            UsuarioDAO usuarioDAO = new UsuarioDAO();
+            Usuario usuario = usuarioDAO.buscarPorLogin(login);
+
+            // Verifica se usuário existe e senha confere
+            if (usuario != null && usuario.getSenha().equals(senha)) {
+                // Salva usuário na sessão
+                request.getSession().setAttribute("usuario", usuario);
+                response.sendRedirect("home.html");
+            } else {
+                // Login inválido
+                response.sendRedirect("index.html?erro=login");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.sendRedirect("index.html?erro=servidor");
         }
     }
 }

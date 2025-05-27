@@ -4,39 +4,35 @@
  */
 package api;
 
-/**
- *
- * @author raffinoh
- */
-
-import jakarta.servlet.*;
-import jakarta.servlet.http.*;
-import jakarta.servlet.annotation.*;
-import java.io.IOException;
+import dao.UsuarioDAO;
 import models.Usuario;
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.*;
+import java.io.IOException;
+import java.util.UUID;
 
 @WebServlet("/CadastroServlet")
 public class CadastroServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        // Pegando os dados do formulário
-        String nome = request.getParameter("nome");
-        String email = request.getParameter("email");
-        String usuario = request.getParameter("usuario");
+        String login = request.getParameter("usuario");
         String senha = request.getParameter("senha");
 
-        // Criando o objeto de modelo
-        Usuario novoUsuario = new Usuario(nome, email, usuario, senha);
+        Usuario novoUsuario = new Usuario(login, senha);
+        novoUsuario.setId(UUID.randomUUID().toString());
 
-        // Aqui você poderia salvar o usuário no banco de dados
-
-        // Armazenar o usuário na sessão (opcional)
-        request.getSession().setAttribute("usuario", novoUsuario);
-
-        // Redireciona para uma página de boas-vindas ou dashboard
-        response.sendRedirect("home.html");
+        try {
+            UsuarioDAO usuarioDAO = new UsuarioDAO();
+            usuarioDAO.inserir(novoUsuario);
+            request.getSession().setAttribute("usuario", novoUsuario);
+            response.sendRedirect("home.html");
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.sendRedirect("index.html?erro=cadastro");
+        }
     }
 }
 
