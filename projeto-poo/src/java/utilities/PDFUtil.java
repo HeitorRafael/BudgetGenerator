@@ -3,6 +3,7 @@ package utilities;
 import com.lowagie.text.*;
 import com.lowagie.text.pdf.*;
 import java.io.ByteArrayOutputStream;
+import javax.swing.text.Document;
 import models.orcamento;
 
 public class PDFUtil {
@@ -15,7 +16,7 @@ public class PDFUtil {
      */
     public static byte[] gerarPDF(orcamento o, boolean comMarcaDagua) throws Exception {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        Document doc = new Document();
+        Document doc = new Document() {};
         PdfWriter writer = PdfWriter.getInstance(doc, baos);
         doc.open();
 
