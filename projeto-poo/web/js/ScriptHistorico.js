@@ -99,28 +99,47 @@ function formatarData(dataISO) {
     return `${dia}/${mes}/${ano} ${hora}:${minuto}`;
 }
 
-       function toggleDetalhes(orcamentoId) {
-            const detalhesDiv = document.getElementById(`detalhes-${orcamentoId}`);
-            if (detalhesDiv) {
-                detalhesDiv.style.display = detalhesDiv.style.display === 'none' ? 'block' : 'none';
+function toggleDetalhes(orcamentoId) {
+    const detalhesDiv = document.getElementById(`detalhes-${orcamentoId}`);
+    if (detalhesDiv) {
+        detalhesDiv.style.display = detalhesDiv.style.display === 'none' ? 'block' : 'none';
+    }
+}
+
+function excluirOrcamento(orcamentoId) {
+    const botaoExcluir = event.target; // Obtém o elemento do botão que foi clicado
+    const itemOrcamento = botaoExcluir.closest('.item-orcamento'); // Encontra o ancestral mais próximo com a classe 'item-orcamento'
+
+    if (itemOrcamento && confirm(`Tem certeza que deseja excluir o orçamento "${itemOrcamento.querySelector('.nome-orcamento').textContent}"?`)) {
+        itemOrcamento.remove(); // Remove o elemento 'li' (item do orçamento) do DOM
+        alert(`Orçamento "${itemOrcamento.querySelector('.nome-orcamento').textContent}" excluído.`);
+        // Se você tiver uma mensagem de "Nenhum orçamento encontrado", pode verificar
+        // se a lista ficou vazia e exibir a mensagem novamente, se necessário.
+        const listaOrcamentos = document.getElementById('lista-de-orcamentos');
+        if (listaOrcamentos.children.length === 0) {
+            const mensagemVazio = document.getElementById('mensagem-vazio');
+            if (mensagemVazio) {
+                mensagemVazio.style.display = 'block';
             }
         }
+    }
+}
 
-        function excluirOrcamento(orcamentoId) {
-            const botaoExcluir = event.target; // Obtém o elemento do botão que foi clicado
-            const itemOrcamento = botaoExcluir.closest('.item-orcamento'); // Encontra o ancestral mais próximo com a classe 'item-orcamento'
+// script para remover marca d'água do PDF
 
-            if (itemOrcamento && confirm(`Tem certeza que deseja excluir o orçamento "${itemOrcamento.querySelector('.nome-orcamento').textContent}"?`)) {
-                itemOrcamento.remove(); // Remove o elemento 'li' (item do orçamento) do DOM
-                alert(`Orçamento "${itemOrcamento.querySelector('.nome-orcamento').textContent}" excluído.`);
-                // Se você tiver uma mensagem de "Nenhum orçamento encontrado", pode verificar
-                // se a lista ficou vazia e exibir a mensagem novamente, se necessário.
-                const listaOrcamentos = document.getElementById('lista-de-orcamentos');
-                if (listaOrcamentos.children.length === 0) {
-                    const mensagemVazio = document.getElementById('mensagem-vazio');
-                    if (mensagemVazio) {
-                        mensagemVazio.style.display = 'block';
-                    }
-                }
-            }
+function removerMarcaDagua(id) {
+    fetch('/projeto-poo/RemoverMarcaDagua', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: 'id=' + encodeURIComponent(id)
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.sucesso) {
+            alert('Pagamento confirmado! Você pode baixar o PDF sem marca d\'água.');
+            location.reload();
+        } else {
+            alert('Erro: ' + (data.erro || 'Tente novamente.'));
         }
+    });
+}
