@@ -88,3 +88,53 @@ body {
 .detalhes-expandidos p {
     margin-bottom: 5px;
 }
+
+.detalhes-expandidos {
+            padding: 10px 20px;
+            background-color: #495057;
+            border-radius: 0 0 4px 4px;
+            margin-top: 5px;
+            display: none; /* Inicialmente escondido */
+            color: #fff;
+            font-size: 0.9rem;
+            width: 100%; /* Ocupar a largura total do item */
+            box-sizing: border-box; /* Incluir padding e border na largura */
+        }
+        .detalhes-expandidos p {
+            margin-bottom: 5px;
+        }
+        .item-orcamento {
+            background-color: #343a40; /* Cor de fundo dos itens da lista */
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            /* Remove o display flex para que os elementos internos se empilhem */
+            /* display: flex;
+            justify-content: space-between;
+            align-items: center; */
+            flex-direction: column; /* Empilhar os elementos verticalmente */
+            align-items: stretch; /* Esticar os elementos na largura */
+        }
+        .acoes-orcamento {
+            /* Mantém o display flex para alinhar "Visualizar" e "Excluir" */
+            display: flex;
+            align-items: center;
+            justify-content: flex-end; /* Alinhar os botões à direita */
+            margin-top: 10px; /* Adicionar espaço acima dos botões */
+        }
+        .info-orcamento {
+            flex-grow: 1;
+        }
+        .acoes-orcamento button {
+            background-color: #dc3545; /* Cor dos botões de ação */
+            color: #fff;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin-left: 10px;
+        }
+        .acoes-orcamento button:hover {
+            background-color: #c82333;
+        }
