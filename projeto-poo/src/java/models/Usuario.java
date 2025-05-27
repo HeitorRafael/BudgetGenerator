@@ -117,4 +117,8 @@ public class Usuario {
     public String getId() {
         return id;
     }
+
+    public void setId(String toString) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }
