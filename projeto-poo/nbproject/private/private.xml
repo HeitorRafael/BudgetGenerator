@@ -3,10 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Kauan/OneDrive/Documentos/GitHub/BudgetGenerator/projeto-poo/src/java/api/GeminiAPIClient.java</file>
-            <file>file:/C:/Users/Kauan/OneDrive/Documentos/GitHub/BudgetGenerator/projeto-poo/src/java/api/OrcamentoApi.java</file>
-            <file>file:/C:/Users/Kauan/OneDrive/Documentos/GitHub/BudgetGenerator/projeto-poo/test/models/orcamentoIT.java</file>
-            <file>file:/C:/Users/Kauan/OneDrive/Documentos/GitHub/BudgetGenerator/projeto-poo/web/index.html</file>
+            <file>file:/C:/Users/Kauan/OneDrive/Documentos/GitHub/BudgetGenerator/projeto-poo/src/java/api/LoginServlet.java</file>
+            <file>file:/C:/Users/Kauan/OneDrive/Documentos/GitHub/BudgetGenerator/projeto-poo/src/java/utilities/PDFUtil.java</file>
+            <file>file:/C:/Users/Kauan/OneDrive/Documentos/GitHub/BudgetGenerator/projeto-poo/src/java/dao/UsuarioDAO.java</file>
+            <file>file:/C:/Users/Kauan/OneDrive/Documentos/GitHub/BudgetGenerator/projeto-poo/src/java/models/Usuario.java</file>
+            <file>file:/C:/Users/Kauan/OneDrive/Documentos/GitHub/BudgetGenerator/projeto-poo/src/java/api/CadastroServlet.java</file>
             <file>file:/C:/Users/Kauan/OneDrive/Documentos/GitHub/BudgetGenerator/projeto-poo/src/java/api/AuthServlet.java</file>
         </group>
     </open-files>
