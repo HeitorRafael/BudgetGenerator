@@ -38,4 +38,12 @@ body {
     background-color: #F7374F;
 }
 
-/*ola*/
+.nav-tabs .nav-link {
+    color: #ccc;
+    border: none;
+}
+.nav-tabs .nav-link.active {
+    color: #FF894C;
+    background: transparent;
+    border-bottom: 2px solid #FF894C;
+}
