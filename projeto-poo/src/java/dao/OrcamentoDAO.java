@@ -39,4 +39,14 @@ public class OrcamentoDAO {
         }
         return lista;
     }
+
+    // Remove a marca d'água (define como false)
+    public void removerMarcaDagua(String orcamentoId) throws SQLException {
+        String sql = "UPDATE orcamentos SET com_marca_dagua = 0 WHERE id = ?";
+        try (Connection conn = utilities.DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, orcamentoId);
+            stmt.executeUpdate();
+        }
+    }
 }
