@@ -128,18 +128,20 @@ function excluirOrcamento(orcamentoId) {
 // script para remover marca d'água do PDF
 
 function removerMarcaDagua(id) {
-    fetch('/projeto-poo/RemoverMarcaDagua', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-        body: 'id=' + encodeURIComponent(id)
-    })
-    .then(res => res.json())
-    .then(data => {
-        if (data.sucesso) {
-            alert('Pagamento confirmado! Você pode baixar o PDF sem marca d\'água.');
-            location.reload();
-        } else {
-            alert('Erro: ' + (data.erro || 'Tente novamente.'));
-        }
-    });
+    if (confirm("Deseja realmente pagar para remover a marca d'água deste orçamento?")) {
+        fetch('/projeto-poo/RemoverMarcaDagua', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            body: 'id=' + encodeURIComponent(id)
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.sucesso) {
+                alert('Pagamento confirmado! Você pode baixar o PDF sem marca d\'água.');
+                location.reload();
+            } else {
+                alert('Erro: ' + (data.erro || 'Tente novamente.'));
+            }
+        });
+    }
 }
