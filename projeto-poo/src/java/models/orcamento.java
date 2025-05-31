@@ -13,7 +13,7 @@ import java.util.UUID;
 public class orcamento {
     private String id;
     private String descricao;
-    public double valor;
+    private double valor;
     private boolean comMarcaDagua;
 
     public orcamento(String descricao, double valor) {
