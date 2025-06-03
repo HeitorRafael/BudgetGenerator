@@ -1,0 +1,32 @@
+# NetBeans
+nbproject/private/
+build/
+dist/
+*.class
+*.jar
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
+
+# IDEs e arquivos de projeto
+*.iml
+.idea/
+*.log
+
+# Arquivos temporários
+*.swp
+*.bak
+*.tmp
+
+# Chaves e arquivos sensíveis
+*.env
+*.secret
+src/java/config/ApiKeys.java
+
+# Arquivos de estado da IDE
+.project
+.classpath
+.settings/
+nbproject/private/private.xml
+

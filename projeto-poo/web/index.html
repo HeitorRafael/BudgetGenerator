@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login e Cadastro</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #181818; /* Preto mais escuro */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            color: #eee; /* Texto branco/cinza claro para contraste */
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        .container {
+            background-color: #222; /* Container um pouco mais claro que o fundo */
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            width: 450px;
+            max-width: 95%;
+            transition: box-shadow 0.3s ease-in-out, background-color 0.3s ease-in-out;
+        }
+
+        .container:hover {
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+            background-color: #282828;
+        }
+
+        .tab-buttons {
+            display: flex;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #444;
+        }
+
+        .tab-button {
+            flex: 1;
+            padding: 15px 20px;
+            text-align: center;
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-size: 18px;
+            color: #aaa;
+            transition: color 0.3s ease-in-out, border-bottom 0.3s ease-in-out;
+        }
+
+        .tab-button.active {
+            color: #e53935; /* Vermelho vibrante */
+            border-bottom: 3px solid #e53935;
+            font-weight: 500;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #ccc;
+            font-size: 16px;
+        }
+
+        input[type="email"],
+        input[type="password"],
+        input[type="text"] {
+            width: calc(100% - 24px);
+            padding: 12px;
+            border: 1px solid #555;
+            border-radius: 6px;
+            font-size: 16px;
+            background-color: #333;
+            color: #eee;
+            transition: border-color 0.3s ease-in-out, background-color 0.3s ease-in-out;
+        }
+
+        input[type="email"]:focus,
+        input[type="password"]:focus,
+        input[type="text"]:focus {
+            border-color: #e53935;
+            outline: none;
+            box-shadow: 0 0 6px rgba(229, 57, 53, 0.4);
+            background-color: #444;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center; /* Centraliza o botão de entrar */
+            margin-top: 30px;
+        }
+
+        button {
+            padding: 14px 24px;
+            border: none;
+            border-radius: 6px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            width: auto; /* Garante que a largura se ajuste ao conteúdo */
+        }
+
+        .login-button {
+            background-color: #333; /* Preto mais suave */
+            color: #eee;
+        }
+
+        .register-button {
+            background-color: #e53935; /* Vermelho vibrante */
+            color: #fff;
+            display: block; /* Garante que o botão ocupe a largura total do pai */
+            width: 100%;
+            text-align: center; /* Centraliza o texto dentro do botão de registrar */
+        }
+
+        .login-button:hover {
+            background-color: #555;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+        }
+
+        .register-button:hover {
+            background-color: #d32f2f;
+            box-shadow: 0 4px 8px rgba(229, 57, 53, 0.5);
+        }
+
+        .social-login {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .social-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            padding: 12px;
+            border: 1px solid #555;
+            border-radius: 6px;
+            background-color: #333;
+            color: #eee;
+            text-decoration: none;
+            transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out, border-color 0.3s ease-in-out;
+        }
+
+        .social-button:hover {
+            background-color: #444;
+            border-color: #666;
+        }
+
+        .social-button img {
+            height: 22px;
+            filter: brightness(0.8); /* Suaviza um pouco as cores dos logos */
+        }
+
+        .separator {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            color: #777;
+            margin: 25px 0;
+            font-size: 14px;
+        }
+
+        .separator::before,
+        .separator::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid #444;
+        }
+
+        .separator:not(:empty)::before {
+            margin-right: 1.2em;
+        }
+
+        .separator:not(:empty)::after {
+            margin-left: 1.2em;
+        }
+
+        .forgot-password {
+            display: block;
+            margin-top: 12px;
+            font-size: 14px;
+            color: #aaa;
+            text-decoration: none;
+            transition: color 0.3s ease-in-out;
+        }
+
+        .forgot-password:hover {
+            color: #e53935;
+            text-decoration: underline;
+        }
+
+        .create-account {
+            text-align: center;
+            margin-top: 25px;
+            font-size: 16px;
+            color: #aaa;
+        }
+
+        .create-account a {
+            color: #e53935;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease-in-out;
+        }
+
+        .create-account a:hover {
+            color: #d32f2f;
+            text-decoration: underline;
+        }
+
+        .form-section {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.4s ease-in-out;
+        }
+
+        .form-section.active {
+            display: block;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="tab-buttons">
+            <button class="tab-button active" onclick="showForm('login')">Entrar</button>
+            <button class="tab-button" onclick="showForm('register')">Registrar-se</button>
+        </div>
+
+        <div id="login-form" class="form-section active">
+            <div class="social-login">
+                <a href="YOUR_GOOGLE_AUTH_URL" class="social-button">
+                    <img src="https://agenciapnz.com/wp-content/uploads/Logo-Google-G.png" alt="Google">
+                    Entrar com Google
+                </a>
+                <a href="YOUR_APPLE_AUTH_URL" class="social-button">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Apple_logo_black.svg/1667px-Apple_logo_black.svg.png" alt="Apple">
+                    Entrar com Apple
+                </a>
+            </div>
+
+            <div class="separator">ou</div>
+
+            <form action="auth" method="post">
+                <input type="hidden" name="action" value="login">
+                <div class="form-group">
+                    <label for="login-email">Email</label>
+                    <input type="email" id="login-email" name="login-email" placeholder="Seu email">
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Senha</label>
+                    <input type="password" id="login-password" name="login-password" placeholder="Sua senha">
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <label style="display: flex; align-items: center; gap: 5px;">
+                        <input type="checkbox" style="width: auto; margin-right: 5px;"> <span style="font-size: 14px;">Lembrar-me</span>
+                    </label>
+                    <a href="#" class="forgot-password">Esqueceu a senha?</a>
+                </div>
+                <div class="button-container">
+                    <button type="submit" class="login-button">Entrar</button>
+                </div>
+                <p style="font-size: 13px; color: #888; margin-top: 15px; text-align: center;">
+                    Ao entrar, você concorda com os <a href="#" style="color: #e53935; text-decoration: none;">termos de serviço</a>,
+                    <a href="#" style="color: #e53935; text-decoration: none;">política de privacidade</a> e
+                    <a href="#" style="color: #e53935; text-decoration: none;">uso de cookies</a>.
+                </p>
+            </form>
+        </div>
+
+        <div id="register-form" class="form-section">
+            <form action="auth" method="post">
+                <input type="hidden" name="action" value="register">
+                <div class="form-group">
+                    <label for="register-name">Nome</label>
+                    <input type="text" id="register-name" name="register-name" placeholder="Seu nome">
+                </div>
+                <div class="form-group">
+                    <label for="register-email">Email</label>
+                    <input type="email" id="register-email" name="register-email" placeholder="Seu email">
+                </div>
+                <div class="form-group">
+                    <label for="register-password">Senha</label>
+                    <input type="password" id="register-password" name="register-password" placeholder="Sua senha">
+                </div>
+                <div class="form-group">
+                    <label for="confirm-password">Confirmar Senha</label>
+                    <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirme sua senha">
+                </div>
+                <button type="submit" class="register-button">Criar conta</button>
+                <div class="create-account">
+                    Já tem uma conta? <a href="#" onclick="showForm('login')">Entrar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function showForm(formId) {
+            const loginForm = document.getElementById('login-form');
+            const registerForm = document.getElementById('register-form');
+            const loginTab = document.querySelector('.tab-buttons button:first-child');
+            const registerTab = document.querySelector('.tab-buttons button:last-child');
+
+            if (formId === 'login') {
+                loginForm.classList.add('active');
+                registerForm.classList.remove('active');
+                loginTab.classList.add('active');
+                registerTab.classList.remove('active');
+            } else if (formId === 'register') {
+                registerForm.classList.add('active');
+                loginForm.classList.remove('active');
+                registerTab.classList.add('active');
+                loginTab.classList.remove('active');
+            }
+        }
+    </script>
+</body>
+</html>
