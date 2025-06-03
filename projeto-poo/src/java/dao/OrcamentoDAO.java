@@ -49,4 +49,25 @@ public class OrcamentoDAO {
             stmt.executeUpdate();
         }
     }
+
+    public static orcamento buscarPorId(String id) throws SQLException {
+        String sql = "SELECT * FROM orcamentos WHERE id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, id);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                orcamento o = new orcamento(rs.getString("tipo"));
+                // Preencha os campos conforme seu modelo
+                o.setId(rs.getString("id"));
+                o.setNomeProduto(rs.getString("nome_produto"));
+                // ... outros campos ...
+                o.setValorFinal(rs.getDouble("valor_final"));
+                o.setRespostaIA(rs.getString("resposta_ia"));
+                o.setComMarcaDagua(rs.getInt("comMarcaDagua") == 1);
+                return o;
+            }
+        }
+        return null;
+    }
 }
