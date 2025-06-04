@@ -49,7 +49,7 @@ public class GeminiAPIClient {
         requestBody.put("contents", contents);
 
         // Conexão HTTP
-        URL url = new URL(API_URL);
+        URL url = URL.of(API_URL);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("POST");
         connection.setDoOutput(true);
@@ -95,7 +95,7 @@ public class GeminiAPIClient {
 
     private static void ignorarValidacaoSSL() {
          try {
-        // Cria um trust manager que não valida certificados
+        // Cria um trust manager que não valida certificados -deve ser retirado em produção-
         TrustManager[] trustAllCerts = new TrustManager[] {
             new X509TrustManager() {
                 public X509Certificate[] getAcceptedIssuers() {

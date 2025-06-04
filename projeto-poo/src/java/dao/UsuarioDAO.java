@@ -4,6 +4,8 @@ import models.Usuario;
 import utilities.DBConnection;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UsuarioDAO {
 
@@ -33,5 +35,19 @@ public class UsuarioDAO {
             }
         }
         return null;
+    }
+
+    public List<String> listarOrcamentosPorUsuario(int usuarioId) throws SQLException {
+        List<String> orcamentos = new ArrayList<>();
+        String sql = "SELECT conteudo FROM orcamentos WHERE usuario_id = ? ORDER BY data_criacao DESC";
+        try (Connection conn = this.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, usuarioId);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                orcamentos.add(rs.getString("conteudo"));
+            }
+        }
+        return orcamentos;
     }
 }
