@@ -1,6 +1,7 @@
 # Ignorar tudo da pasta nbproject, inclusive arquivos privados
 nbproject/
-!nbproject/project.xml  # (opcional) incluir apenas se quiser manter o project.xml
+projeto-poo/nbproject/
+
 
 # Build e arquivos temporários do NetBeans
 build/
