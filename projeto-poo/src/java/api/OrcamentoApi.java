@@ -5,12 +5,13 @@
 package api;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
+import java.io.BufferedReader;
 import org.json.JSONObject;
 
 /**
@@ -116,19 +117,6 @@ public class OrcamentoApi extends HttpServlet {
 
                 //Configuração http e envia resposta
                 response.getWriter().write(resposta.toString());
-                
-                // Após gerar o orçamento com a IA:
-                String orcamentoGerado = GeminiAPIClient.enviarPrompt(prompt);
-
-                // Pegue o ID do usuário autenticado (usando sessão)
-                HttpSession session = request.getSession(false);
-                Integer usuarioId = (Integer) session.getAttribute("usuarioId");
-
-                // Salve no banco
-                OrcamentoDAO dao = new OrcamentoDAO();
-                dao.salvarOrcamento(usuarioId, orcamentoGerado);
-
-                // ...retorne o orçamento para o frontend...
         }catch(Exception e){
             
              e.printStackTrace();

@@ -1,6 +1,5 @@
 package api;
 
-import com.sun.tools.xjc.reader.xmlschema.bindinfo.BIConversion.User;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -83,21 +82,27 @@ public class AuthServlet extends HttpServlet {
             return;
         }
 
-        UsuarioDAO usuarioDAO = new UsuarioDAO();
-        try {
-            Usuario usuario = usuarioDAO.buscarPorEmail(email);
-            if (usuario != null && usuario.getSenha().equals(password)) {
-                HttpSession session = request.getSession();
-                session.setAttribute("usuario", usuario);
-                response.sendRedirect("home.jsp");
+        User user = users.get(email);
+
+        if (user != null) {
+            try {
+                // Compara a senha fornecida com a senha hash armazenada
+                if (verifyPassword(password, user.getHashedPassword())) {
+                    // Login bem-sucedido: Armazena o usuário na sessão
+                    HttpSession session = request.getSession();
+                    session.setAttribute("loggedInUser", user);
+                    System.out.println("Usuário logado: " + user.getEmail()); // Log para depuração
+                    response.sendRedirect("home.jsp"); // Redireciona para a página home
+                    return;
+                }
+            } catch (NoSuchAlgorithmException e) {
+                request.setAttribute("error", "Erro interno no servidor durante o login.");
+                request.getRequestDispatcher("index.html").forward(request, response);
                 return;
             }
-        } catch (SQLException e) {
-            request.setAttribute("error", "Erro interno no servidor durante o login.");
-            request.getRequestDispatcher("index.html").forward(request, response);
-            return;
         }
 
+        // Login falhou
         request.setAttribute("error", "Email ou senha inválidos.");
         request.getRequestDispatcher("index.html").forward(request, response);
     }
@@ -112,6 +117,7 @@ public class AuthServlet extends HttpServlet {
         String password = request.getParameter("register-password");
         String confirmPassword = request.getParameter("confirm-password");
 
+        // Validação básica dos campos
         if (name == null || name.trim().isEmpty() ||
             email == null || email.trim().isEmpty() ||
             password == null || password.trim().isEmpty() ||
@@ -127,19 +133,24 @@ public class AuthServlet extends HttpServlet {
             return;
         }
 
-        UsuarioDAO usuarioDAO = new UsuarioDAO();
+        if (users.containsKey(email)) {
+            request.setAttribute("error", "Este email já está registrado.");
+            request.getRequestDispatcher("index.html").forward(request, response);
+            return;
+        }
+
         try {
-            if (usuarioDAO.buscarPorEmail(email) != null) {
-                request.setAttribute("error", "Este email já está registrado.");
-                request.getRequestDispatcher("index.html").forward(request, response);
-                return;
-            }
-            Usuario novoUsuario = new Usuario(email, password);
-            usuarioDAO.inserir(novoUsuario);
+            String hashedPassword = hashPassword(password);
+            String userId = UUID.randomUUID().toString(); // Gera um ID único para o novo usuário
+            User newUser = new User(userId, name, email, hashedPassword);
+            users.put(email, newUser); // Armazena o novo usuário
+
+            // Registro bem-sucedido: Armazena o novo usuário na sessão
             HttpSession session = request.getSession();
-            session.setAttribute("usuario", novoUsuario);
-            response.sendRedirect("home.jsp");
-        } catch (SQLException e) {
+            session.setAttribute("loggedInUser", newUser);
+            System.out.println("Usuário registrado: " + newUser.getEmail()); // Log para depuração
+            response.sendRedirect("home.jsp"); // Redireciona para a página home
+        } catch (NoSuchAlgorithmException e) {
             request.setAttribute("error", "Erro interno no servidor durante o registro.");
             request.getRequestDispatcher("index.html").forward(request, response);
         }

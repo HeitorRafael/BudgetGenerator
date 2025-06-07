@@ -1,44 +1,30 @@
 package api;
 
-import dao.OrcamentoDAO;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.*;
-import models.Usuario;
-import models.orcamento;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.util.List;
+@WebServlet("/api/historicoApi")
+public class HistoricoOrcamento extends HttpServlet {
 
-@WebServlet("/HistoricoOrcamentos")
-public class HistoricoOrcamentosServlet extends HttpServlet {
+    private static List<JSONObject> historicoDeOrcamentos = new ArrayList<>();
+
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        response.setContentType("application/json");
-        HttpSession session = request.getSession(false);
-        Usuario usuario = (session != null) ? (Usuario) session.getAttribute("usuario") : null;
-        if (usuario == null) {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.getWriter().write("{\"erro\":\"Usuário não autenticado\"}");
-            return;
-        }
-        try {
-            List<orcamento> lista = new OrcamentoDAO().listarPorUsuario(usuario.getId());
-            JSONArray arr = new JSONArray();
-            for (orcamento o : lista) {
-                JSONObject obj = new JSONObject();
-                obj.put("id", o.getId());
-                obj.put("descricao", o.getDescricao());
-                obj.put("valor", o.getValor());
-                obj.put("comMarcaDagua", o.isComMarcaDagua());
-                // Adicione outros campos conforme necessário
-                arr.put(obj);
-            }
-            response.getWriter().write(arr.toString());
-        } catch (Exception e) {
-            response.setStatus(500);
-            response.getWriter().write("{\"erro\":\"Erro ao buscar histórico\"}");
-        }
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("application/json;charset=UTF-8");
+        JSONArray jsonArray = new JSONArray(historicoDeOrcamentos);
+        response.getWriter().write(jsonArray.toString());
+    }
+
+    // Este método será chamado pela OrcamentoApi para adicionar um novo orçamento ao histórico
+    public static void adicionarOrcamentoAoHistorico(JSONObject orcamento) {
+        historicoDeOrcamentos.add(orcamento);
     }
 }

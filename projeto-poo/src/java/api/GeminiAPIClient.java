@@ -24,7 +24,7 @@ import org.json.JSONObject;
  * @author alexo
  */
 public class GeminiAPIClient {
-    private static final String API_KEY = ""; // Sua chave aqui
+    private static final String API_KEY = "AIzaSyAjmR9uT6fvim90qpQqxFBWLlUPkaB9zx8"; // Sua chave aqui
     private static final String API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=" + API_KEY;
 
 
@@ -49,7 +49,7 @@ public class GeminiAPIClient {
         requestBody.put("contents", contents);
 
         // Conexão HTTP
-        URL url = URL.of(API_URL);
+        URL url = new URL(API_URL);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("POST");
         connection.setDoOutput(true);
@@ -95,7 +95,7 @@ public class GeminiAPIClient {
 
     private static void ignorarValidacaoSSL() {
          try {
-        // Cria um trust manager que não valida certificados -deve ser retirado em produção-
+        // Cria um trust manager que não valida certificados
         TrustManager[] trustAllCerts = new TrustManager[] {
             new X509TrustManager() {
                 public X509Certificate[] getAcceptedIssuers() {
