@@ -1,5 +1,3 @@
-//conexão com o DB
-
 package utilities;
 
 import java.sql.Connection;
@@ -7,8 +5,11 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DBConnection {
-    // Retorna uma conexão pronta para uso
-    public static Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(DBConfig.URL);
+
+    // Caminho do banco de dados SQLite
+    private static final String URL = "jdbc:sqlite:C:\\Users\\Lukas\\Documents\\BudgetGenerator\\banco de dados\\BudgetGenerator.db";
+
+    public static Connection conectar() throws SQLException {
+        return DriverManager.getConnection(URL);
     }
 }

@@ -1,32 +1,32 @@
-# Ignorar tudo da pasta nbproject, inclusive arquivos privados
-nbproject/
-projeto-poo/nbproject/
-
-
-# Build e arquivos temporários do NetBeans
+# NetBeans
+nbproject/private/
 build/
 dist/
 *.class
 *.jar
 
-# Arquivos temporários do sistema
+# Sistema operacional
 .DS_Store
 Thumbs.db
 
-# IDEs (Eclipse, IntelliJ etc)
+# IDEs e arquivos de projeto
 *.iml
 .idea/
-.project
-.classpath
-.settings/
+*.log
 
 # Arquivos temporários
 *.swp
 *.bak
 *.tmp
-*.log
 
-# Chaves ou configs sensíveis
+# Chaves e arquivos sensíveis
 *.env
 *.secret
 src/java/config/ApiKeys.java
+
+# Arquivos de estado da IDE
+.project
+.classpath
+.settings/
+nbproject/private/private.xml
+

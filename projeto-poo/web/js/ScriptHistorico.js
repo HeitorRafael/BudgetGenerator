@@ -2,7 +2,7 @@
 
 document.addEventListener('DOMContentLoaded', function() {
     carregarHistoricoOrcamentos(1); // Carrega a primeira página ao carregar a página
-}); 
+});
 
 const itensPorPagina = 3;
 let historicoTotal = [];

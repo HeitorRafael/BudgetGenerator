@@ -18,11 +18,18 @@ public class Usuario {
     private String id;
     private String login;
     private String senha;
+    private String email;
     private String fotoPerfil;
     private List<orcamento> orcamentos;
     private boolean logado;
 
     public Usuario(String nome, String email, String usuario, String senha) {
+        this.login = usuario;
+        this.senha = senha;
+        this.email = email;
+        this.id = UUID.randomUUID().toString();
+        this.orcamentos = new ArrayList<>();
+        this.logado = true;
     }
 
 
@@ -110,11 +117,31 @@ public class Usuario {
         return logado;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public String getLogin() {
         return login;
     }
 
     public String getId() {
         return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getSenha() {
+        return senha;
+    }
+
+    public void setSenha(String senha) {
+        this.senha = senha;
     }
 }
