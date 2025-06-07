@@ -46,3 +46,17 @@
         });
     });
 
+// Exibe mensagem de erro se houver parâmetro na URL
+        document.addEventListener('DOMContentLoaded', function() {
+            const params = new URLSearchParams(window.location.search);
+            if (params.has('erro')) {
+                let msg = '';
+                if (params.get('erro') === 'login') msg = 'Email ou senha inválidos.';
+                if (params.get('erro') === 'cadastro') msg = 'Erro ao cadastrar. Tente novamente.';
+                if (params.get('erro') === 'servidor') msg = 'Erro interno no servidor.';
+                if (msg) {
+                    document.getElementById('mensagem-erro').innerText = msg;
+                    document.getElementById('mensagem-erro').style.display = 'block';
+                }
+            }
+        });
