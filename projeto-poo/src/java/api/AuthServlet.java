@@ -92,7 +92,7 @@ public class AuthServlet extends HttpServlet {
                     HttpSession session = request.getSession();
                     session.setAttribute("loggedInUser", user);
                     System.out.println("Usuário logado: " + user.getEmail()); // Log para depuração
-                    response.sendRedirect("home.html"); // Redireciona para a página home
+                    response.sendRedirect("home.jsp"); // Redireciona para a página home
                     return;
                 }
             } catch (NoSuchAlgorithmException e) {
@@ -149,7 +149,7 @@ public class AuthServlet extends HttpServlet {
             HttpSession session = request.getSession();
             session.setAttribute("loggedInUser", newUser);
             System.out.println("Usuário registrado: " + newUser.getEmail()); // Log para depuração
-            response.sendRedirect("home.html"); // Redireciona para a página home
+            response.sendRedirect("home.jsp"); // Redireciona para a página home
         } catch (NoSuchAlgorithmException e) {
             request.setAttribute("error", "Erro interno no servidor durante o registro.");
             request.getRequestDispatcher("index.html").forward(request, response);
