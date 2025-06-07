@@ -4,6 +4,10 @@
  */
 package api;
 
+import java.sql.Connection;
+import java.sql.Statement;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -13,6 +17,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import org.json.JSONObject;
+import utilities.DBConnection;
 
 /**
  *
@@ -61,6 +66,10 @@ public class OrcamentoApi extends HttpServlet {
             //Criação de um objeto json com os dados recebidos
              JSONObject json = new JSONObject();
              
+             
+             //string que vai ser montada com o prompt
+             String respostaIA = "";
+             
              //Monta o prompt especifico para o tipo do formulario
              String prompt;
              if("produto".equals(tipo)){
@@ -83,6 +92,20 @@ public class OrcamentoApi extends HttpServlet {
                 "Custo de produção: R$" + custo + "\n" +
                 "Margem de lucro desejada: " + lucro + "%\n\n" +
                 "Calcule o preço final de venda e explique o cálculo.";
+                
+                respostaIA = GeminiAPIClient.enviarPrompt(prompt);
+                
+                //Conexão com o banco SQlite
+                try (Connection conn = DBConnection.conectar();
+                    Statement stmt = conn.createStatement()) {
+
+                    //Inserção dos dados do formulario de Produto
+                    String sql = "INSERT INTO produtos (nome, materiais, custo, lucro, resposta) VALUES (" +
+                                "'" + nome + "', '" + materiais + "', " + custo + ", " + lucro + ", '" + respostaIA.replace("'", "''") + "')";
+                    stmt.executeUpdate(sql);
+                } catch (Exception ex) {
+                    ex.printStackTrace(); // só para garantir que erros no banco não travem a API
+}
               
              }else{
                  
@@ -106,10 +129,23 @@ public class OrcamentoApi extends HttpServlet {
                 "Valor por hora: R$" + valorHora + "\n" +
                 "Custos extras: R$" + custosExtras + "\n\n" +
                 "Calcule o valor total e explique o cálculo.";
+                
+                respostaIA = GeminiAPIClient.enviarPrompt(prompt);
+                
+                //Conexão com o banco SQlite
+                try (Connection conn = DBConnection.conectar();
+                    Statement stmt = conn.createStatement()) {
+
+                    //Inserção dos dados do formulario de Serviços
+                    String sql = "INSERT INTO servicos (descricao, horas, valor_hora, custos_extras, resposta) VALUES (" +
+                                "'" + descricao + "', '" + horas + "', " + valorHora + ", " + custosExtras + ", '" + respostaIA.replace("'", "''") + "')";
+                    stmt.executeUpdate(sql);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
       
-             }
+                }
              
-                String respostaIA = GeminiAPIClient.enviarPrompt(prompt);
 
                 //Cria o JSON de resposta final
                 JSONObject resposta = new JSONObject();
