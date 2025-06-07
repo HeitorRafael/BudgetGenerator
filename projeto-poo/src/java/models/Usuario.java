@@ -16,7 +16,7 @@ import java.util.UUID;
 public class Usuario {
     
     private String id;
-    private String login;
+    private String usuario;
     private String senha;
     private String email;
     private String fotoPerfil;
@@ -24,7 +24,7 @@ public class Usuario {
     private boolean logado;
 
     public Usuario(String nome, String email, String usuario, String senha) {
-        this.login = usuario;
+        this.usuario = usuario;
         this.senha = senha;
         this.email = email;
         this.id = UUID.randomUUID().toString();
@@ -34,9 +34,9 @@ public class Usuario {
 
 
 
-    public Usuario(String login, String senha) {
+    public Usuario(String usuario, String senha) {
         this.id = UUID.randomUUID().toString();
-        this.login = login;
+        this.usuario = usuario;
         this.senha = senha;
         this.orcamentos = new ArrayList<>();
         this.logado = true;
@@ -126,7 +126,7 @@ public class Usuario {
     }
 
     public String getLogin() {
-        return login;
+        return usuario;
     }
 
     public String getId() {

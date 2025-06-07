@@ -18,10 +18,10 @@ public class CadastroServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String login = request.getParameter("usuario");
+        String usuario = request.getParameter("usuario");
         String senha = request.getParameter("senha");
 
-        Usuario novoUsuario = new Usuario(login, senha);
+        Usuario novoUsuario = new Usuario(usuario, senha);
         novoUsuario.setId(UUID.randomUUID().toString());
 
         try {
