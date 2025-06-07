@@ -1,6 +1,5 @@
 package dao;
 
-import models.orcamento;
 import utilities.DBConnection;
 
 import java.sql.*;
@@ -8,6 +7,38 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OrcamentoDAO {
+    
+    // Salva um novo serviço
+    public void inserirServico(String descricao, double horas, double valorHora, double custosExtras, String usuarioId) throws SQLException {
+        String sql = "INSERT INTO servicos (descricao, horas, valor_hora, custos_extras, resposta) VALUES (?, ?, ?, ?, ?, ?)";
+        try (Connection conn = DBConnection.conectar();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(3, descricao);
+            stmt.setDouble(4, horas);
+            stmt.setDouble(5, valorHora);
+            stmt.setDouble(6, custosExtras);
+            stmt.executeUpdate();
+        }
+    }
+
+    // Lista todos os serviços de um usuário
+    public List<orcamento> listarServicosPorUsuario(String usuarioId) throws SQLException {
+        List<orcamento> lista = new ArrayList<>();
+        String sql = "SELECT * FROM servicos WHERE usuario_id = ?";
+        try (Connection conn = DBConnection.conectar();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, usuarioId);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                orcamento o = new orcamento(
+                    rs.getString("descricao"),
+                    rs.getDouble("horas") * rs.getDouble("valor_hora") + rs.getDouble("custos_extras")
+                );
+                lista.add(o);
+            }
+        }
+        return lista;
+    }
 
     // Salva um novo orçamento
     public void inserir(orcamento o, String usuarioId) throws SQLException {
@@ -80,4 +111,6 @@ public class OrcamentoDAO {
             stmt.executeUpdate();
         }
     }
+    
+    
 }

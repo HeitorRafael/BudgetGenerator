@@ -87,7 +87,7 @@ public class OrcamentoApi extends HttpServlet {
                 prompt = 
                 "Você é um assistente que cria orçamentos para PRODUTOS. Gere um orçamento com:\n\n" +
                 "Nome do produto: " + nome + "\n" +
-                "Materiais utilizados: " + materiais + "\n" +
+                "Materiais utilizados: " + materiais + "procure o preço médio desses materiais para fazer o calculo.\n" +
                 "Custo de produção: R$" + custo + "\n" +
                 "Margem de lucro desejada: " + lucro + "%\n\n" +
                 "Calcule o preço final de venda e explique o cálculo.";
@@ -153,18 +153,6 @@ public class OrcamentoApi extends HttpServlet {
                 //Configuração http e envia resposta
                 response.getWriter().write(resposta.toString());
                 
-                // Após gerar o orçamento com a IA:
-                String orcamentoGerado = GeminiAPIClient.enviarPrompt(prompt);
-
-                // Pegue o ID do usuário autenticado (usando sessão)
-                HttpSession session = request.getSession(false);
-                Integer usuarioId = (Integer) session.getAttribute("usuarioId");
-
-                // Salve no banco
-                OrcamentoDAO dao = new OrcamentoDAO();
-                dao.salvarOrcamento(usuarioId, orcamentoGerado);
-
-                // ...retorne o orçamento para o frontend...
         }catch(Exception e){
             
              e.printStackTrace();

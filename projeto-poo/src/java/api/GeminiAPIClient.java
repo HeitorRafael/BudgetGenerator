@@ -49,7 +49,7 @@ public class GeminiAPIClient {
         requestBody.put("contents", contents);
 
         // Conexão HTTP
-        URL url = URL.of(API_URL);
+        URL url = new URL(API_URL);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("POST");
         connection.setDoOutput(true);
