@@ -1,6 +1,6 @@
 package models;
 
-public class Orcamento {
+public class orcamento {
     private int id;
     private String tipo; // "produto" ou "servico"
     // Produto
@@ -14,7 +14,7 @@ public class Orcamento {
     private Double valorHora;
     private Double custosExtras;
 
-    public Orcamento() {}
+    public orcamento() {}
 
     // Getters e Setters
     public int getId() { return id; }

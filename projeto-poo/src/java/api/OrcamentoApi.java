@@ -85,12 +85,17 @@ public class OrcamentoApi extends HttpServlet {
                 
                 // Prompt para produtos
                 prompt = 
-                "Você é um assistente que cria orçamentos para PRODUTOS. Gere um orçamento com:\n\n" +
-                "Nome do produto: " + nome + "\n" +
-                "Materiais utilizados: " + materiais + "procure o preço médio desses materiais para fazer o calculo.\n" +
-                "Custo de produção: R$" + custo + "\n" +
-                "Margem de lucro desejada: " + lucro + "%\n\n" +
-                "Calcule o preço final de venda e explique o cálculo.";
+                "Você é um assistente especializado em orçamentos de PRODUTOS. Com base nas informações a seguir, gere um orçamento detalhado, estruturado em tópicos:\n\n" +
+                "1. Nome do produto: " + nome + "\n" +
+                "2. Materiais utilizados: " + materiais + "\n" +
+                "   - Pesquise o preço médio de mercado de cada material listado.\n" +
+                "3. Custo de produção informado: R$" + custo + "\n" +
+                "4. Margem de lucro desejada: " + lucro + "%\n\n" +
+                "Objetivo:\n" +
+                "- Liste cada material com seu preço médio estimado.\n" +
+                "- Calcule o custo total real considerando os materiais.\n" +
+                "- Aplique a margem de lucro sobre o custo total e forneça o preço final sugerido de venda.\n\n" +
+                "Formato da resposta: utilize listas e subtítulos, evite parágrafos longos, e explique brevemente o cálculo final.";
                 
                 respostaIA = GeminiAPIClient.enviarPrompt(prompt);
                 
@@ -122,13 +127,14 @@ public class OrcamentoApi extends HttpServlet {
 
                 // Prompt para serviços
                 prompt = 
-                "Você é um assistente que cria orçamentos para SERVIÇOS. Gere um orçamento com:\n\n" +
+                "Você é um assistente que cria orçamentos para SERVIÇOS. Gere um orçamento com base nas seguintes informações:\n\n" +
                 "Descrição do serviço: " + descricao + "\n" +
                 "Tempo estimado: " + horas + " horas\n" +
                 "Valor por hora: R$" + valorHora + "\n" +
                 "Custos extras: R$" + custosExtras + "\n\n" +
-                "Calcule o valor total e explique o cálculo.";
-                
+                "Se aplicável, considere custos indiretos típicos (como transporte, ferramentas, equipamentos, etc) para o tipo de serviço descrito, com valores aproximados de mercado.\n" +
+                "Calcule o valor total do serviço considerando todos os custos e explique brevemente como chegou ao valor.";
+
                 respostaIA = GeminiAPIClient.enviarPrompt(prompt);
                 
                 //Conexão com o banco SQlite
