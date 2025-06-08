@@ -23,7 +23,7 @@
                 <!-- Coluna esquerda -->
                 <div class="col-md-6">
                     <div class="logo mb-3">
-                        <img src="caminho/para/seu-logo.png" alt="Logo do site">
+                        <img src="img/logo.png">
                     </div>
                     <div class="main-title mt-3">HOME</div>
                     <nav class="mt-4">
