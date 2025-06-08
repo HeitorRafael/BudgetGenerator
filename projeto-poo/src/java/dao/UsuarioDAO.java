@@ -12,7 +12,7 @@ public class UsuarioDAO {
     // Insere um novo usuário no banco
     public void inserir(Usuario usuario) throws SQLException {
         String sql = "INSERT INTO usuarios (id, login, senha) VALUES (?, ?, ?)";
-        try (Connection conn = DBConnection.getConnection();
+        try (Connection conn = DBConnection.conectar();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, usuario.getId());
             stmt.setString(2, usuario.getLogin());

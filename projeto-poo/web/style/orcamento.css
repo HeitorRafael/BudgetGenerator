@@ -47,3 +47,23 @@ body {
     background: transparent;
     border-bottom: 2px solid #FF894C;
 }
+
+#resultado {
+    display: none;
+    background-color: #444;
+    color: white;
+    padding: 1rem;
+    border-radius: 8px;
+    max-height: 300px;
+    overflow-y: auto;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+#resultado div {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: pre-wrap; /* respeita quebras de linha da IA */
+    max-height: 400px;
+    overflow-y: auto;
+}

@@ -60,11 +60,11 @@ function gerarOrcamento(tipo) {
             
             // Se chegou aqui, mostra o resultado
             document.getElementById('resultado').innerHTML = `
-                <h3 class="mb-3">Orçamento Gerado:</h3>
-                <div class="bg-dark p-3 rounded border border-light">
-                    ${dados.resposta.replace(/\n/g, '<br>')}
-                </div>
-            `;
+            <h3 class="mb-3">Orçamento Gerado:</h3>
+            <div class="bg-dark p-3 rounded border border-light mb-3">
+                ${dados.resposta.replace(/\n/g, '<br>')}
+            </div>
+        `;
             
         } catch (e) {
             // Se falhar ao parsear JSON, mostra o erro original
@@ -81,3 +81,7 @@ function gerarOrcamento(tipo) {
         console.error("Erro detalhado:", erro);
     });
 };
+
+function scrollToTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
