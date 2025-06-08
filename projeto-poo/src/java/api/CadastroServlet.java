@@ -5,7 +5,6 @@
 package api;
 
 import dao.UserDAO;
-import models.Usuario;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -21,7 +20,7 @@ public class CadastroServlet extends HttpServlet {
         String usuario = request.getParameter("usuario");
         String senha = request.getParameter("senha");
 
-        Usuario novoUsuario = new Usuario(usuario, senha);
+        User novoUsuario = new User(usuario, senha);
         novoUsuario.setId(UUID.randomUUID().toString());
 
         try {

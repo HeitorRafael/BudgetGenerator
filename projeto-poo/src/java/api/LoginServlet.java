@@ -5,7 +5,6 @@
 package api;
 
 import dao.UserDAO;
-import models.Usuario;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -26,7 +25,7 @@ public class LoginServlet extends HttpServlet {
 
         try {
             UserDAO UserDAO = new UserDAO();
-            Usuario usuario = UserDAO.buscarPorLogin(login);
+            User usuario = (User) UserDAO.buscarPorLogin(login);
 
             // Verifica se usuário existe e senha confere
             if (usuario != null && usuario.getSenha().equals(senha)) {

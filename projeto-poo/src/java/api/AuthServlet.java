@@ -63,7 +63,7 @@ public class AuthServlet extends HttpServlet {
 
         User user = userDAO.getUserByEmail(email);
 
-        if (user != null && userDAO.checkPassword(password, user.getPassword())) {
+        if (user != null && userDAO.checkPassword(password, user.getSenha())) {
             // Login bem-sucedido
             HttpSession session = request.getSession();
             session.setAttribute("loggedInUser", user); // Armazena o objeto User na sessão

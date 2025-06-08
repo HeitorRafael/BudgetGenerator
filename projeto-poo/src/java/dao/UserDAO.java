@@ -1,12 +1,12 @@
 package dao; // Ajuste o pacote conforme sua estrutura
 
-import api.User;
+
 import org.mindrot.jbcrypt.BCrypt; // Importa a biblioteca BCrypt para hashing de senhas
 
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter; // Para formatar LocalDateTime para String e vice-versa no SQLite
-import models.Usuario;
+import api.User;
 
 public class UserDAO {
     // Caminho para o arquivo do banco de dados SQLite
@@ -56,15 +56,15 @@ public class UserDAO {
     // Método para registrar um novo usuário
     public boolean registerUser(User user) {
         // Hash da senha antes de salvar
-        String hashedPassword = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt());
-        user.setPassword(hashedPassword); // Atualiza o objeto user com a senha hasheada
+        String hashedPassword = BCrypt.hashpw(user.getSenha(), BCrypt.gensalt());
+        user.setSenha(hashedPassword); // Atualiza o objeto user com a senha hasheada
 
         String sql = "INSERT INTO users (name, email, password) VALUES (?, ?, ?)";
         try (Connection conn = getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, user.getName());
             pstmt.setString(2, user.getEmail());
-            pstmt.setString(3, user.getPassword()); // Senha já hasheada
+            pstmt.setString(3, user.getSenha()); // Senha já hasheada
 
             int rowsAffected = pstmt.executeUpdate();
             return rowsAffected > 0;
@@ -91,10 +91,10 @@ public class UserDAO {
 
             if (rs.next()) {
                 user = new User();
-                user.setId(rs.getInt("id"));
+                user.setId(rs.getString("id"));
                 user.setName(rs.getString("name"));
                 user.setEmail(rs.getString("email"));
-                user.setPassword(rs.getString("password")); // É o hash, não a senha em texto puro!
+                user.setSenha(rs.getString("password")); // É o hash, não a senha em texto puro!
 
                 // Convertendo String para LocalDateTime (SQLite armazena DATETIME como TEXT)
                 String createdAtStr = rs.getString("created_at");
@@ -117,11 +117,11 @@ public class UserDAO {
         return BCrypt.checkpw(plainPassword, hashedPasswordFromDB);
     }
 
-    public void inserir(Usuario novoUsuario) {
+    public void inserir(User novoUsuario) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
-    public Usuario buscarPorLogin(String login) {
+    public User buscarPorLogin(String login) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

@@ -7,8 +7,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 import java.io.IOException;
 import java.util.List;
-import models.Usuario;
-import models.orcamento;
+import models.Orcamento;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -25,11 +24,11 @@ public class ListarOrcamentosServlet extends HttpServlet {
             return;
         }
 
-        Usuario usuario = (Usuario) session.getAttribute("usuario");
-        List<orcamento> orcamentos = usuario.getOrcamentos();
+        User usuario = (User) session.getAttribute("usuario");
+        List<Orcamento> orcamentos = usuario.getOrcamentos();
 
         JSONArray lista = new JSONArray();
-        for (orcamento o : orcamentos) {
+        for (Orcamento o : orcamentos) {
             JSONObject obj = new JSONObject();
             obj.put("id", o.getId());
             obj.put("descricao", o.toString());

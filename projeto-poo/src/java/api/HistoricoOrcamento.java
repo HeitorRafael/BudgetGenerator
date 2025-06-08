@@ -11,8 +11,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-@WebServlet("/api/historicoApi")
+// In src/java/api/HistoricoOrcamento.java
+@WebServlet("/api/historicoOrcamento") // Changed this line
 public class HistoricoOrcamento extends HttpServlet {
+    // ...
 
     private static List<JSONObject> historicoDeOrcamentos = new ArrayList<>();
 

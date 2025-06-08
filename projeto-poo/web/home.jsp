@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="api.User" %>
 <%
     // Verifica se o usuário está logado
     Object usuarioObj = session.getAttribute("loggedInUser");
@@ -25,7 +26,6 @@
         <div class="row justify-content-center align-items-start">
             <div class="col-md-6">
                 <div class="logo mb-3">
-                    <!-- Exemplo: se tiver foto no objeto User -->
                     <img src="<%= usuario.getFotoPerfil() != null ? usuario.getFotoPerfil() : "https://via.placeholder.com/200x250" %>" alt="Foto do Usuário" style="max-width:200px;">
                 </div>
                 <div class="main-title mt-3">HOME</div>

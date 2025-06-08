@@ -15,9 +15,9 @@ import static org.junit.jupiter.api.Assertions.*;
  *
  * @author raffinoh
  */
-public class orcamentoIT {
+public class OrcamentoIT {
     
-    public orcamentoIT() {
+    public OrcamentoIT() {
     }
     
     @BeforeAll
@@ -42,7 +42,7 @@ public class orcamentoIT {
     @Test
     public void testRemoverMarcaDagua() {
         System.out.println("removerMarcaDagua");
-        orcamento instance = null;
+        Orcamento instance = null;
         instance.removerMarcaDagua();
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
@@ -54,7 +54,7 @@ public class orcamentoIT {
     @Test
     public void testGetId() {
         System.out.println("getId");
-        orcamento instance = null;
+        Orcamento instance = null;
         String expResult = "";
         String result = instance.getId();
         assertEquals(expResult, result);
@@ -68,7 +68,7 @@ public class orcamentoIT {
     @Test
     public void testIsComMarcaDagua() {
         System.out.println("isComMarcaDagua");
-        orcamento instance = null;
+        Orcamento instance = null;
         boolean expResult = false;
         boolean result = instance.isComMarcaDagua();
         assertEquals(expResult, result);
@@ -82,7 +82,7 @@ public class orcamentoIT {
     @Test
     public void testToString() {
         System.out.println("toString");
-        orcamento instance = null;
+        Orcamento instance = null;
         String expResult = "";
         String result = instance.toString();
         assertEquals(expResult, result);

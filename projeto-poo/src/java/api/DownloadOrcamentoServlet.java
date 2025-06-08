@@ -4,8 +4,7 @@ import dao.OrcamentoDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
-import models.Usuario;
-import models.orcamento;
+import models.Orcamento;
 import utilities.PDFUtil;
 
 import java.io.IOException;
@@ -22,13 +21,13 @@ public class DownloadOrcamentoServlet extends HttpServlet {
             response.sendRedirect("index.html");
             return;
         }
-        Usuario usuario = (Usuario) session.getAttribute("usuario");
+        User usuario = (User) session.getAttribute("usuario");
 
         // Busque o orçamento do banco (ajuste se necessário)
         OrcamentoDAO dao = new OrcamentoDAO();
-        orcamento o = null;
+        Orcamento o = null;
         try {
-            for (orcamento item : dao.listarPorUsuario(usuario.getId())) {
+            for (Orcamento item : dao.listarPorUsuario(usuario.getId())) {
                 if (item.getId().equals(orcamentoId)) {
                     o = item;
                     break;

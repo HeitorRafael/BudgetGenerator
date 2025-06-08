@@ -1,51 +1,140 @@
-package api; // Ajuste o pacote conforme sua estrutura
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package api;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+import models.Orcamento;
 
+/**
+ *
+ * @author raffinoh
+ */
 public class User {
-    private int id;
-    private String name;
+    
+    private String id;
+    private String usuario;
+    private String senha;
     private String email;
-    private String password; // Lembre-se: será o hash da senha
-    private LocalDateTime createdAt;
-    // Você pode adicionar um campo para fotoPerfil se for usar o do JSP
-    // private String fotoPerfil;
+    private String fotoPerfil;
+    private List<Orcamento> orcamentos;
+    private boolean logado;
+    private String nome; // Exemplo de campo para armazenar o nome    
 
-    // Construtor vazio (útil para frameworks ou para instanciar e setar campos depois)
+    User(String name, String email, String password) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
     public User() {
-    }
-
-    // Construtor com todos os campos (útil para criar objetos User completos)
-    public User(int id, String name, String email, String password, LocalDateTime createdAt) {
-        this.id = id;
-        this.name = name;
-        this.email = email;
-        this.password = password;
-        this.createdAt = createdAt;
-    }
-
-    // Construtor para criar um novo usuário (sem ID e created_at, pois o DB gera)
-    public User(String name, String email, String password) {
-        this.name = name;
-        this.email = email;
-        this.password = password;
-    }
-
-    // Getters e Setters
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     public String getName() {
-        return name;
+        return nome;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setName(String nome) { // Se você não tiver um setter, adicione-o também
+        this.nome = nome;
+    }
+
+
+    public User(String nome, String email, String usuario, String senha) {
+        this.usuario = usuario;
+        this.senha = senha;
+        this.email = email;
+        this.id = UUID.randomUUID().toString();
+        this.orcamentos = new ArrayList<>();
+        this.logado = true;
+    }
+
+
+
+    public User(String usuario, String senha) {
+        this.id = UUID.randomUUID().toString();
+        this.usuario = usuario;
+        this.senha = senha;
+        this.orcamentos = new ArrayList<>();
+        this.logado = true;
+    }
+
+    // Foto de perfil
+    public void setFotoPerfil(String caminhoArquivo) {
+        this.fotoPerfil = caminhoArquivo;
+    }
+
+    public String getFotoPerfil() {
+        return this.fotoPerfil;
+    }
+
+    // Alterar senha
+    public boolean alterarSenha(String senhaAntiga, String novaSenha) {
+        if (this.senha.equals(senhaAntiga)) {
+            this.senha = novaSenha;
+            return true;
+        }
+        return false;
+    }
+
+    // Gerar orçamento com marca d'água
+    public Orcamento gerarOrcamento(String descricao, double valor) {
+        Orcamento o = new Orcamento(descricao, valor);
+        orcamentos.add(o);
+        return o;
+    }
+
+    // Ver orçamentos
+    public List<Orcamento> getOrcamentos() {
+        return orcamentos;
+    }
+
+    // Excluir orçamento
+    public boolean excluirOrcamento(String id) {
+        return orcamentos.removeIf(o -> o.getId().equals(id));
+    }
+
+    // Imprimir orçamento (simulação de impressão)
+    public void imprimirOrcamento(String id) {
+        Orcamento o = buscarOrcamentoPorId(id);
+        if (o != null) {
+            System.out.println("=== ORÇAMENTO ===");
+            System.out.println(o);
+        } else {
+            System.out.println("Orçamento não encontrado.");
+        }
+    }
+
+    // Tirar marca d'água após pagamento (simulação)
+    public boolean pagarParaTirarMarcaDagua(String id) {
+        Orcamento o = buscarOrcamentoPorId(id);
+        if (o != null) {
+            o.removerMarcaDagua();
+            return true;
+        }
+        return false;
+    }
+
+    // Encerrar sessão
+    public void sair() {
+        this.logado = false;
+    }
+
+    // Buscar orçamento
+    private Orcamento buscarOrcamentoPorId(String id) {
+        for (Orcamento o : orcamentos) {
+            if (o.getId().equals(id)) {
+                return o;
+            }
+        }
+        return null;
+    }
+
+    public boolean isLogado() {
+        return logado;
     }
 
     public String getEmail() {
@@ -56,48 +145,28 @@ public class User {
         this.email = email;
     }
 
-    public String getPassword() {
-        return password;
+    public String getLogin() {
+        return usuario;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public String getId() {
+        return id;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
+    public String getSenha() {
+        return senha;
     }
 
-    /*
-    // Exemplo de getter/setter para fotoPerfil, se você decidir adicioná-lo
-    public String getFotoPerfil() {
-        // Por enquanto, retorna um placeholder se não houver foto
-        return fotoPerfil != null ? fotoPerfil : "https://via.placeholder.com/200x250";
+    public void setSenha(String senha) {
+        this.senha = senha;
     }
 
-    public void setFotoPerfil(String fotoPerfil) {
-        this.fotoPerfil = fotoPerfil;
-    }
-    */
 
-    @Override
-    public String toString() {
-        return "User{" +
-               "id=" + id +
-               ", name='" + name + '\'' +
-               ", email='" + email + '\'' +
-               ", password='[PROTECTED]'" + // Nunca imprima a senha real em logs!
-               ", createdAt=" + createdAt +
-               '}';
-    }
-
-    public static class java {
-
-        public java() {
-        }
+    public void setCreatedAt(LocalDateTime parse) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

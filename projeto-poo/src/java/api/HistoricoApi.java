@@ -11,8 +11,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-@WebServlet("/api/historicoApi")
+@WebServlet("/api/historicoApi") // This is also the problematic part
 public class HistoricoApi extends HttpServlet {
+    // ...
 
     private static List<JSONObject> historicoDeOrcamentos = new ArrayList<>();
 

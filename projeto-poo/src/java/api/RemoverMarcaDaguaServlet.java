@@ -4,8 +4,7 @@ import dao.OrcamentoDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
-import models.Usuario;
-import models.orcamento;
+import models.Orcamento;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -23,14 +22,14 @@ public class RemoverMarcaDaguaServlet extends HttpServlet {
             response.getWriter().write("{\"erro\":\"Usuário não autenticado\"}");
             return;
         }
-        Usuario usuario = (Usuario) session.getAttribute("usuario");
+        User usuario = (User) session.getAttribute("usuario");
 
         OrcamentoDAO dao = new OrcamentoDAO();
         try {
             // Busca o orçamento do usuário
-            List<orcamento> orcamentos = dao.listarPorUsuario(usuario.getId());
-            orcamento encontrado = null;
-            for (orcamento o : orcamentos) {
+            List<Orcamento> orcamentos = dao.listarPorUsuario(usuario.getId());
+            Orcamento encontrado = null;
+            for (Orcamento o : orcamentos) {
                 if (o.getId().equals(orcamentoId)) {
                     encontrado = o;
                     break;
