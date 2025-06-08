@@ -24,7 +24,7 @@ import org.json.JSONObject;
  * @author alexo
  */
 public class GeminiAPIClient {
-    private static final String API_KEY = ""; // Sua chave aqui
+    private static final String API_KEY = "AIzaSyA186a4B1u9Kc6Ihn0lcKCJYyqMXbOt2Jo"; // Sua chave aqui
     private static final String API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=" + API_KEY;
 
 
