@@ -1,20 +1,16 @@
-package utilities;
+/* package utilities;
 
 import com.lowagie.text.*;
 import com.lowagie.text.pdf.*;
+import java.awt.Color;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import models.orcamento;
+import models.Orcamento;
 
 public class PDFUtil {
 
-    /**
-     * Gera um PDF do orçamento.
-     * @param orc Orçamento a ser impresso
-     * @param comMarcaDagua Se true, adiciona marca d'água
-     * @return Array de bytes do PDF
-     */
-    public static byte[] gerarPDF(orcamento orc, boolean comMarcaDagua) throws IOException, DocumentException {
+
+    public static byte[] gerarPDF(Orcamento orc, boolean comMarcaDagua) throws IOException, DocumentException {
         Document doc = new Document();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         PdfWriter writer = PdfWriter.getInstance(doc, baos);
@@ -57,3 +53,4 @@ public class PDFUtil {
         return baos.toByteArray();
     }
 }
+*/

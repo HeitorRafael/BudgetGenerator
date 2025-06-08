@@ -5,7 +5,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 import models.Orcamento;
 import models.Usuario;
-import utilities.PDFUtil;
+/*import utilities.PDFUtil;*/
 import dao.OrcamentoDAO;
 
 import java.io.IOException;
@@ -57,6 +57,7 @@ public class DownloadOrcamentoServlet extends HttpServlet {
 
         // Gera o PDF do orçamento
         boolean comMarcaDagua = orcamento.isComMarcaDagua();
+        /*
         try {
             byte[] pdf = PDFUtil.gerarPDF(orcamento, comMarcaDagua);
             resp.setContentType("application/pdf");
@@ -68,5 +69,6 @@ public class DownloadOrcamentoServlet extends HttpServlet {
         } catch (Exception e) {
             resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Erro ao gerar PDF.");
         }
+        */
     }
 }

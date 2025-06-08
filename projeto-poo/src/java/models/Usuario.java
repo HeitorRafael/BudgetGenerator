@@ -21,6 +21,10 @@ public class Usuario {
         this.orcamentos = new ArrayList<>();
     }
 
+    public Usuario(String usuário_Teste, String testexamplecom, String testexamplecom0, String hashedPassword) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
     // Getters e Setters
     public String getId() {
         return id;
