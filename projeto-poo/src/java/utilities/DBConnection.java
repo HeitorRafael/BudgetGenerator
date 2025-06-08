@@ -5,17 +5,19 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DBConnection {
-    private static final String URL = "jdbc:mysql://localhost:3306/seubanco"; // Substitua 'seubanco'
-    private static final String USER = "seu_usuario"; // Substitua 'seu_usuario'
-    private static final String PASSWORD = "sua_senha"; // Substitua 'sua_senha'
 
-    public static Connection getConnection() throws SQLException {
+    // Caminho do banco de dados SQLite
+    private static final String URL = "jdbc:sqlite:C:/Users/Kauan/BudgetGenerator.db";
+
+    public static Connection conectar() throws SQLException {
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver"); // Carrega o driver MySQL
+            // Esta linha força o carregamento do driver JDBC do SQLite
+            Class.forName("org.sqlite.JDBC");
         } catch (ClassNotFoundException e) {
-            System.err.println("Driver JDBC do MySQL não encontrado: " + e.getMessage());
-            throw new SQLException("Driver JDBC não encontrado", e);
+            throw new SQLException("Driver SQLite não encontrado.", e);
         }
-        return DriverManager.getConnection(URL, USER, PASSWORD);
+
+        // Conexão com o banco de dados
+        return DriverManager.getConnection(URL);
     }
 }

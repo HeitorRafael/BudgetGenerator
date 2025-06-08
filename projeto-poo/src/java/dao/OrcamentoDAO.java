@@ -12,7 +12,7 @@ public class OrcamentoDAO {
     // Salva um novo orçamento
     public void inserir(Orcamento o, String usuarioId) throws SQLException {
         String sql = "INSERT INTO orcamentos (id, usuario_id, descricao, valor, com_marca_dagua) VALUES (?, ?, ?, ?, ?)";
-        try (Connection conn = DBConnection.getConnection();
+        try (Connection conn = DBConnection.conectar();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, o.getId());
             stmt.setString(2, usuarioId);
@@ -27,7 +27,7 @@ public class OrcamentoDAO {
     public List<Orcamento> listarPorUsuario(String usuarioId) throws SQLException {
         List<Orcamento> lista = new ArrayList<>();
         String sql = "SELECT * FROM orcamentos WHERE usuario_id = ?";
-        try (Connection conn = DBConnection.getConnection();
+        try (Connection conn = DBConnection.conectar();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, usuarioId);
             ResultSet rs = stmt.executeQuery();
@@ -43,7 +43,7 @@ public class OrcamentoDAO {
     // Remove a marca d'água (define como false)
     public void removerMarcaDagua(String orcamentoId) throws SQLException {
         String sql = "UPDATE orcamentos SET com_marca_dagua = 0 WHERE id = ?";
-        try (Connection conn = utilities.DBConnection.getConnection();
+        try (Connection conn = utilities.DBConnection.conectar();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, orcamentoId);
             stmt.executeUpdate();
@@ -52,7 +52,7 @@ public class OrcamentoDAO {
 
     public static Orcamento buscarPorId(String id) throws SQLException {
         String sql = "SELECT * FROM orcamentos WHERE id = ?";
-        try (Connection conn = DBConnection.getConnection();
+        try (Connection conn = DBConnection.conectar();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, id);
             ResultSet rs = stmt.executeQuery();
@@ -74,7 +74,7 @@ public class OrcamentoDAO {
     // Exclui um orçamento pelo ID
     public void excluir(String orcamentoId) throws SQLException {
         String sql = "DELETE FROM orcamentos WHERE id = ?";
-        try (Connection conn = DBConnection.getConnection();
+        try (Connection conn = DBConnection.conectar();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, orcamentoId);
             stmt.executeUpdate();
