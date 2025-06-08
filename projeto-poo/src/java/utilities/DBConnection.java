@@ -7,7 +7,7 @@ import java.sql.SQLException;
 public class DBConnection {
 
     // Caminho do banco de dados SQLite
-    private static final String URL = "jdbc:sqlite:C:/Users/alexo/banco.db";
+    private static final String URL = "db/BudgetGenerator.db-journal";
 
     public static Connection conectar() throws SQLException {
         try {
@@ -21,8 +21,7 @@ public class DBConnection {
         return DriverManager.getConnection(URL);
     }
 
-    public static Connection getConnection() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getConnection'");
+    public static Connection getConnection() throws SQLException {
+        return conectar(); // Reutiliza o método conectar para obter a conexão
     }
 }

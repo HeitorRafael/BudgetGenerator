@@ -11,12 +11,12 @@ public class UsuarioDAO {
 
     // Insere um novo usuário no banco
     public void inserir(Usuario usuario) throws SQLException {
-        String sql = "INSERT INTO usuarios (id, login, senha) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO USUARIO (nm_email_usuario, nm_senha_usuario, nm_usuario) VALUES (?, ?, ?)";
         try (Connection conn = DBConnection.conectar();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, usuario.getId());
-            stmt.setString(2, usuario.getLogin());
-            stmt.setString(3, usuario.getSenha());
+            stmt.setString(1, usuario.getLogin()); // Email do usuário
+            stmt.setString(2, usuario.getSenha()); // Senha (hash)
+            stmt.setString(3, usuario.getNome());  // Nome do usuário
             stmt.executeUpdate();
         }
     }
@@ -29,7 +29,9 @@ public class UsuarioDAO {
             stmt.setString(1, login);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                Usuario u = new Usuario(rs.getString("login"), rs.getString("senha"));
+                Usuario u = new Usuario();
+                u.setLogin(rs.getString("login"));
+                u.setSenha(rs.getString("senha"));
                 u.setId(rs.getString("id"));
                 return u;
             }
@@ -58,7 +60,9 @@ public class UsuarioDAO {
             stmt.setString(1, email);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                Usuario u = new Usuario(rs.getString("login"), rs.getString("senha"));
+                Usuario u = new Usuario();
+                u.setLogin(rs.getString("login"));
+                u.setSenha(rs.getString("senha"));
                 u.setId(rs.getString("id"));
                 return u;
             }

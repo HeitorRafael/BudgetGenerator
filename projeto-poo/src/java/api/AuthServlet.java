@@ -8,9 +8,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.Base64;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -18,28 +15,14 @@ import dao.UsuarioDAO;
 
 import java.util.UUID; // Para gerar IDs únicos
 import java.sql.SQLException;
+import org.mindrot.jbcrypt.BCrypt;
 
 /**
  * Servlet para lidar com as operações de autenticação (login e registro).
  * Mapeado para a URL "/auth".
  */
-@WebServlet("/auth")
+@WebServlet(name = "AuthServlet", urlPatterns = {"/auth"})
 public class AuthServlet extends HttpServlet {
-    private static final long serialVersionUID = 1L;
-
-    // Armazenamento em memória para usuários (em um ambiente real, use um banco de dados)
-    private static final Map<String, Usuario> Usuario = new ConcurrentHashMap<>();
-
-    // Inicializa alguns usuários de exemplo (para testes)
-    static {
-        try {
-            // Senha "password123" para o usuário de teste
-            String hashedPassword = hashPassword("password123");
-            Usuario.put("test@example.com", new Usuario());
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-    }
 
     /**
      * Lida com as requisições POST para login e registro.
@@ -108,6 +91,7 @@ public class AuthServlet extends HttpServlet {
 
     /**
      * Processa a requisição de registro.
+     * Valida os dados, insere no banco e redireciona corretamente.
      */
     private void handleRegister(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -116,11 +100,12 @@ public class AuthServlet extends HttpServlet {
         String password = request.getParameter("register-password");
         String confirmPassword = request.getParameter("confirm-password");
 
+        // Validação dos dados do formulário
         if (name == null || name.trim().isEmpty() ||
             email == null || email.trim().isEmpty() ||
             password == null || password.trim().isEmpty() ||
             confirmPassword == null || confirmPassword.trim().isEmpty()) {
-            request.setAttribute("error", "Todos os campos são obrigatórios para o registro.");
+            request.setAttribute("error", "Todos os campos são obrigatórios.");
             request.getRequestDispatcher("index.html").forward(request, response);
             return;
         }
@@ -138,8 +123,13 @@ public class AuthServlet extends HttpServlet {
                 request.getRequestDispatcher("index.html").forward(request, response);
                 return;
             }
-            Usuario novoUsuario = new Usuario(email, password);
+
+            // Gera o hash da senha antes de salvar
+            String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
+            Usuario novoUsuario = new Usuario(name, email, hashedPassword);
             usuarioDAO.inserir(novoUsuario);
+
+            // Cria sessão e redireciona para home.jsp após registro bem-sucedido
             HttpSession session = request.getSession();
             session.setAttribute("usuario", novoUsuario);
             response.sendRedirect("home.jsp");
@@ -150,26 +140,16 @@ public class AuthServlet extends HttpServlet {
     }
 
     /*
-     Gera o hash SHA-256 de uma senha.
-     Usar BCrypt.
+     Gera o hash da senha usando BCrypt.
      */
-    private static String hashPassword(String password) throws NoSuchAlgorithmException {
-        MessageDigest md = MessageDigest.getInstance("SHA-256");
-        byte[] hash = md.digest(password.getBytes());
-        return Base64.getEncoder().encodeToString(hash);
+    private static String hashPassword(String password) {
+        return BCrypt.hashpw(password, BCrypt.gensalt());
     }
 
     /*
-      Verifica se uma senha corresponde a um hash.
-      pensar em usar uma biblioteca mais robustas como BCrypt.
+      Verifica se uma senha corresponde a um hash usando BCrypt.
      */
     private static boolean verifyPassword(String rawPassword, String hashedPassword) {
-        try {
-            String hashedRawPassword = hashPassword(rawPassword);
-            return hashedRawPassword.equals(hashedPassword);
-        } catch (NoSuchAlgorithmException e) {
-            // Em caso de erro ao hashear, considera a senha inválida
-            return false;
-        }
+        return BCrypt.checkpw(rawPassword, hashedPassword);
     }
 }
