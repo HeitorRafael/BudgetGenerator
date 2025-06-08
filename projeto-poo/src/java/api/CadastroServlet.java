@@ -4,7 +4,7 @@
  */
 package api;
 
-import dao.UsuarioDAO;
+import dao.UserDAO;
 import models.Usuario;
 
 import jakarta.servlet.ServletException;
@@ -25,8 +25,8 @@ public class CadastroServlet extends HttpServlet {
         novoUsuario.setId(UUID.randomUUID().toString());
 
         try {
-            UsuarioDAO usuarioDAO = new UsuarioDAO();
-            usuarioDAO.inserir(novoUsuario);
+            UserDAO UserDAO = new UserDAO();
+            UserDAO.inserir(novoUsuario);
             request.getSession().setAttribute("usuario", novoUsuario);
             response.sendRedirect("home.html");
         } catch (Exception e) {

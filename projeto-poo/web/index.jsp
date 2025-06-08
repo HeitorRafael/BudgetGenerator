@@ -1,3 +1,4 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -6,10 +7,20 @@
     <title>Login e Cadastro</title>
     <link rel="stylesheet" href="style/index.css">
     <script src="js/index.js"></script>
-    
 </head>
 <body>
-    <div id="mensagem-erro" style="display:none;color:#e53935;text-align:center;margin-bottom:15px;"></div>
+    <div id="mensagem-erro" style="display:none;color:#e53935;text-align:center;margin-bottom:15px;">
+        <%
+            // Recupera a mensagem de erro do request, se houver
+            String errorMessage = (String) request.getAttribute("errorMessage");
+            if (errorMessage != null && !errorMessage.isEmpty()) {
+                // Exibe a mensagem de erro
+                out.println(errorMessage);
+                // Usa JavaScript para tornar a div visível
+                out.println("<script>document.getElementById('mensagem-erro').style.display = 'block';</script>");
+            }
+        %>
+    </div>
     <div class="container">
         <div class="tab-buttons">
             <button class="tab-button active" onclick="showForm('login')">Entrar</button>
