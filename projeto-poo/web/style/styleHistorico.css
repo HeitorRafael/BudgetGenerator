@@ -59,11 +59,11 @@
 
 /* Estilos para os detalhes expandidos */
 .detalhes-expandidos {
+    display: none; /* Garante que todos começam ocultos */
     padding: 10px 15px;
     background-color: #495057; /* Cor de fundo similar ao container */
     border-radius: 4px;
     margin-top: 10px;
-    /*display: none;  Inicialmente escondido */
     color: #fff;
     font-size: 0.85rem;
     width: 100%;
