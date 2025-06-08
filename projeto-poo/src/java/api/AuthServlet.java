@@ -1,6 +1,6 @@
 package api;
 
-import com.sun.tools.xjc.reader.xmlschema.bindinfo.BIConversion.User;
+import models.Usuario;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -24,15 +24,16 @@ public class AuthServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     // Armazenamento em memória para usuários (em um ambiente real, use um banco de dados)
-    private static final Map<String, User> users = new ConcurrentHashMap<>();
+    private static final Map<String, Usuario> Usuario = new ConcurrentHashMap<>();
 
     // Inicializa alguns usuários de exemplo (para testes)
     static {
         try {
             // Senha "password123" para o usuário de teste
             String hashedPassword = hashPassword("password123");
-            users.put("test@example.com", new User(UUID.randomUUID().toString(), "Usuário Teste", "test@example.com", hashedPassword));
+            Usuario.put("test@example.com", new Usuario("Usuário Teste", "test@example.com", "test@example.com", hashedPassword));
         } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
         }
     }
 
