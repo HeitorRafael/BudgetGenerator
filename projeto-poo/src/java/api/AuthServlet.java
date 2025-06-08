@@ -13,7 +13,11 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+import dao.UsuarioDAO;
+
 import java.util.UUID; // Para gerar IDs únicos
+import java.sql.SQLException;
 
 /**
  * Servlet para lidar com as operações de autenticação (login e registro).
@@ -31,7 +35,7 @@ public class AuthServlet extends HttpServlet {
         try {
             // Senha "password123" para o usuário de teste
             String hashedPassword = hashPassword("password123");
-            Usuario.put("test@example.com", new Usuario("Usuário Teste", "test@example.com", "test@example.com", hashedPassword));
+            Usuario.put("test@example.com", new Usuario());
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
@@ -50,7 +54,6 @@ public class AuthServlet extends HttpServlet {
         String action = request.getParameter("action");
 
         if (action == null) {
-            // Nenhuma ação especificada, redireciona de volta para a página de login
             request.setAttribute("error", "Ação inválida.");
             request.getRequestDispatcher("index.html").forward(request, response);
             return;
@@ -87,7 +90,7 @@ public class AuthServlet extends HttpServlet {
         UsuarioDAO usuarioDAO = new UsuarioDAO();
         try {
             Usuario usuario = usuarioDAO.buscarPorEmail(email);
-            if (usuario != null && usuario.getSenha().equals(password)) {
+            if (usuario != null && verifyPassword(password, usuario.getSenha())) {
                 HttpSession session = request.getSession();
                 session.setAttribute("usuario", usuario);
                 response.sendRedirect("home.jsp");
@@ -146,9 +149,9 @@ public class AuthServlet extends HttpServlet {
         }
     }
 
-    /**
-     * Gera o hash SHA-256 de uma senha.
-     * ATENÇÃO: Para produção, use bibliotecas mais robustas como BCrypt.
+    /*
+     Gera o hash SHA-256 de uma senha.
+     Usar BCrypt.
      */
     private static String hashPassword(String password) throws NoSuchAlgorithmException {
         MessageDigest md = MessageDigest.getInstance("SHA-256");
@@ -156,12 +159,17 @@ public class AuthServlet extends HttpServlet {
         return Base64.getEncoder().encodeToString(hash);
     }
 
-    /**
-     * Verifica se uma senha corresponde a um hash.
-     * ATENÇÃO: Para produção, use bibliotecas mais robustas como BCrypt.
+    /*
+      Verifica se uma senha corresponde a um hash.
+      pensar em usar uma biblioteca mais robustas como BCrypt.
      */
-    private static boolean verifyPassword(String rawPassword, String hashedPassword) throws NoSuchAlgorithmException {
-        String hashedRawPassword = hashPassword(rawPassword);
-        return hashedRawPassword.equals(hashedPassword);
+    private static boolean verifyPassword(String rawPassword, String hashedPassword) {
+        try {
+            String hashedRawPassword = hashPassword(rawPassword);
+            return hashedRawPassword.equals(hashedPassword);
+        } catch (NoSuchAlgorithmException e) {
+            // Em caso de erro ao hashear, considera a senha inválida
+            return false;
+        }
     }
 }

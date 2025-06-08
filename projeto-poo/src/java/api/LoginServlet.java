@@ -11,6 +11,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 import java.io.IOException;
+import org.mindrot.jbcrypt.BCrypt;
 
 /**
  *
@@ -24,22 +25,37 @@ public class LoginServlet extends HttpServlet {
         String login = request.getParameter("usuario");
         String senha = request.getParameter("senha");
 
+        // Validação de entrada
+        if (login == null || login.trim().isEmpty() || senha == null || senha.trim().isEmpty()) {
+            request.setAttribute("erro", "Usuário e senha são obrigatórios.");
+            request.getRequestDispatcher("index.html").forward(request, response);
+            return;
+        }
+
         try {
             UsuarioDAO usuarioDAO = new UsuarioDAO();
             Usuario usuario = usuarioDAO.buscarPorLogin(login);
+            if (usuario == null) {
+                request.setAttribute("erro", "Usuário ou senha inválidos.");
+                request.getRequestDispatcher("index.html").forward(request, response);
+                return;
+            }
 
-            // Verifica se usuário existe e senha confere
-            if (usuario != null && usuario.getSenha().equals(senha)) {
-                // Salva usuário na sessão
-                request.getSession().setAttribute("usuario", usuario);
+            // Verifica se o usuário existe e a senha confere
+            if (usuario != null && BCrypt.checkpw(senha, usuario.getSenha())) {
+                // Salva o usuário na sessão
+                HttpSession session = request.getSession();
+                session.setAttribute("usuario", usuario);
                 response.sendRedirect("home.html");
             } else {
                 // Login inválido
-                response.sendRedirect("index.html?erro=login");
+                request.setAttribute("erro", "Usuário ou senha inválidos.");
+                request.getRequestDispatcher("index.html").forward(request, response);
             }
         } catch (Exception e) {
             e.printStackTrace();
-            response.sendRedirect("index.html?erro=servidor");
+            request.setAttribute("erro", "Erro interno no servidor.");
+            request.getRequestDispatcher("index.html").forward(request, response);
         }
     }
 }

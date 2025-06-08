@@ -4,6 +4,7 @@ import dao.OrcamentoDAO;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 import models.Usuario;
+import models.Orcamento;
 
 import java.io.IOException;
 
@@ -21,8 +22,16 @@ public class ExcluirOrcamentoServlet extends HttpServlet {
         }
         try {
             OrcamentoDAO dao = new OrcamentoDAO();
-            // Opcional: verifique se o orçamento pertence ao usuário
-            dao.excluir(orcamentoId);
+            Orcamento orcamento = dao.buscarPorId(Integer.parseInt(orcamentoId), usuario.getId());
+            if (orcamento == null) {
+                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                response.getWriter().write("{\"erro\":\"Orçamento não encontrado ou não pertence ao usuário\"}");
+                return;
+            }
+
+            // Exclui o orçamento
+            dao.excluir(orcamento.getId());
+            response.setContentType("application/json");
             response.getWriter().write("{\"sucesso\":true}");
         } catch (Exception e) {
             response.setStatus(500);

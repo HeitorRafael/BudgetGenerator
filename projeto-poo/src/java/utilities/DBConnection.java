@@ -20,4 +20,9 @@ public class DBConnection {
         // Conexão com o banco de dados
         return DriverManager.getConnection(URL);
     }
+
+    public static Connection getConnection() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getConnection'");
+    }
 }

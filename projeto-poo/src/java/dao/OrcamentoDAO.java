@@ -1,8 +1,16 @@
 package dao;
 
 import models.Orcamento;
+import models.orcamento;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 import utilities.DBConnection;
-import java.sql.*;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -81,5 +89,103 @@ public class OrcamentoDAO {
         lista.addAll(listarProdutos());
         lista.addAll(listarServicos());
         return lista;
+    }
+
+    // Lista o histórico completo (orçamentos, produtos e serviços) de um usuário
+    public JSONArray listarHistoricoCompleto(String usuarioId) throws Exception {
+        JSONArray historico = new JSONArray();
+
+        // Busca orçamentos do usuário
+        try (Connection conn = DBConnection.conectar()) {
+            String sqlOrcamentos = "SELECT id, descricao, valor, comMarcaDagua FROM orcamentos WHERE usuario_id = ?";
+            try (PreparedStatement ps = conn.prepareStatement(sqlOrcamentos)) {
+                ps.setString(1, usuarioId);
+                try (ResultSet rs = ps.executeQuery()) {
+                    while (rs.next()) {
+                        JSONObject obj = new JSONObject();
+                        obj.put("tipo", "orcamento");
+                        obj.put("id", rs.getInt("id"));
+                        obj.put("descricao", rs.getString("descricao"));
+                        obj.put("valor", rs.getDouble("valor"));
+                        obj.put("comMarcaDagua", rs.getBoolean("comMarcaDagua"));
+                        historico.put(obj);
+                    }
+                }
+            }
+
+            // Busca produtos
+            String sqlProdutos = "SELECT nome, materiais, custo, lucro FROM produtos";
+            try (PreparedStatement ps = conn.prepareStatement(sqlProdutos); ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    JSONObject obj = new JSONObject();
+                    obj.put("tipo", "produto");
+                    obj.put("nome", rs.getString("nome"));
+                    obj.put("materiais", rs.getString("materiais"));
+                    obj.put("custo", rs.getDouble("custo"));
+                    obj.put("lucro", rs.getDouble("lucro"));
+                    historico.put(obj);
+                }
+            }
+
+            // Busca serviços
+            String sqlServicos = "SELECT descricao, horas, valor_hora, custos_extras FROM servicos";
+            try (PreparedStatement ps = conn.prepareStatement(sqlServicos); ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    JSONObject obj = new JSONObject();
+                    obj.put("tipo", "servico");
+                    obj.put("descricao", rs.getString("descricao"));
+                    obj.put("horas", rs.getInt("horas"));
+                    obj.put("valorHora", rs.getDouble("valor_hora"));
+                    obj.put("custosExtras", rs.getDouble("custos_extras"));
+                    historico.put(obj);
+                }
+            }
+        }
+
+        return historico;
+    }
+
+    /**
+     * Método genérico para buscar orçamento por ID, podendo opcionalmente filtrar por usuário.
+     * Se usuarioId for null, busca apenas pelo ID. Se não for null, busca pelo ID e usuário.
+     */
+    public Orcamento buscarPorId(int orcamentoId, String usuarioId) throws SQLException {
+        String sql = "SELECT * FROM orcamentos WHERE id = ? AND usuario_id = ?";
+        try (Connection conn = DBConnection.conectar();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, orcamentoId);
+            stmt.setString(2, usuarioId);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    Orcamento o = new Orcamento();
+                    o.setId(rs.getInt("id"));
+                    o.setDescricao(rs.getString("descricao"));
+                    o.setValorHora(rs.getDouble("valor"));
+                    o.setComMarcaDagua(rs.getBoolean("comMarcaDagua"));
+                    return o;
+                }
+            }
+        }
+        return null; // Retorna null se o orçamento não for encontrado
+    }
+    // Implementação do método excluir
+    public void excluir(int orcamentoId) throws SQLException {
+        String sql = "DELETE FROM orcamentos WHERE id = ?";
+        try (Connection conn = DBConnection.conectar();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, orcamentoId);
+            stmt.executeUpdate();
+        }
+    }
+
+    // Implementação do método removerMarcaDagua
+    public void removerMarcaDagua(int orcamentoId) throws SQLException {
+        String sql = "UPDATE orcamentos SET comMarcaDagua = false WHERE id = ?";
+        try (Connection conn = DBConnection.conectar();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, orcamentoId);
+            stmt.executeUpdate();
+        }
     }
 }

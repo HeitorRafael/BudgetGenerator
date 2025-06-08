@@ -22,7 +22,7 @@ public class UsuarioDAO {
     }
 
     // Busca usuário pelo login
-    public Usuario buscarPorLogin(String login) throws SQLException {
+    public static Usuario buscarPorLogin(String login) throws SQLException {
         String sql = "SELECT * FROM usuarios WHERE login = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -64,5 +64,10 @@ public class UsuarioDAO {
             }
         }
         return null;
+    }
+
+    // Método auxiliar para obter conexão, caso não exista
+    private Connection getConnection() throws SQLException {
+        return DBConnection.getConnection();
     }
 }

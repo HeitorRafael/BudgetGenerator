@@ -1,3 +1,25 @@
+<!-- Exibe mensagem de erro se houver parâmetro "error" na URL -->
+<script>
+    window.addEventListener('DOMContentLoaded', function() {
+        const params = new URLSearchParams(window.location.search);
+        const error = params.get('error');
+        if (error) {
+            const errorDiv = document.createElement('div');
+            errorDiv.textContent = decodeURIComponent(error);
+            errorDiv.style.background = '#e53935';
+            errorDiv.style.color = '#fff';
+            errorDiv.style.padding = '14px 20px';
+            errorDiv.style.borderRadius = '6px';
+            errorDiv.style.marginBottom = '22px';
+            errorDiv.style.textAlign = 'center';
+            errorDiv.style.fontWeight = '500';
+            errorDiv.style.boxShadow = '0 2px 8px rgba(229,57,53,0.18)';
+            errorDiv.setAttribute('id', 'error-message');
+            // Insere antes do .container
+            document.body.insertBefore(errorDiv, document.body.firstChild.nextSibling);
+        }
+    });
+</script>
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>

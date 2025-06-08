@@ -25,7 +25,6 @@ import utilities.DBConnection;
 @WebServlet(name = "OrcamentoApi", urlPatterns = {"/OrcamentoApi"})
 public class OrcamentoApi extends HttpServlet {
 
-
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -62,21 +61,52 @@ public class OrcamentoApi extends HttpServlet {
         String tipo = request.getParameter("tipo");
         
         try{
+            // Validação do parâmetro 'tipo'
+            if (tipo == null || (!"produto".equals(tipo) && !"servico".equals(tipo))) {
+                response.setStatus(400);
+                JSONObject error = new JSONObject();
+                error.put("erro", "Tipo inválido ou não informado. Use 'produto' ou 'servico'.");
+                response.getWriter().write(error.toString());
+                return;
+            }
+
             //Criação de um objeto json com os dados recebidos
-             JSONObject json = new JSONObject();
-             
-             
-             //string que vai ser montada com o prompt
-             String respostaIA = "";
-             
-             //Monta o prompt especifico para o tipo do formulario
-             String prompt;
-             if("produto".equals(tipo)){
+            JSONObject json = new JSONObject();
+            String respostaIA = "";
+            String prompt;
+
+            if("produto".equals(tipo)){
                 String nome = request.getParameter("nome");
                 String materiais = request.getParameter("materiais");
                 String custo = request.getParameter("custo");
                 String lucro = request.getParameter("lucro");
-                 
+
+                // Validações dos parâmetros de produto
+                if (nome == null || nome.trim().isEmpty() ||
+                    materiais == null || materiais.trim().isEmpty() ||
+                    custo == null || custo.trim().isEmpty() ||
+                    lucro == null || lucro.trim().isEmpty()) {
+                    response.setStatus(400);
+                    JSONObject error = new JSONObject();
+                    error.put("erro", "Parâmetros obrigatórios de produto ausentes ou vazios.");
+                    response.getWriter().write(error.toString());
+                    return;
+                }
+                // Validação de tipos numéricos
+                double custoVal;
+                double lucroVal;
+                try {
+                    custoVal = Double.parseDouble(custo);
+                    lucroVal = Double.parseDouble(lucro);
+                    if (custoVal < 0 || lucroVal < 0) throw new NumberFormatException();
+                } catch (NumberFormatException ex) {
+                    response.setStatus(400);
+                    JSONObject error = new JSONObject();
+                    error.put("erro", "Custo e lucro devem ser números válidos e não negativos.");
+                    response.getWriter().write(error.toString());
+                    return;
+                }
+
                 json.put("tipo", tipo);
                 json.put("nome", nome);
                 json.put("materiais", materiais);
@@ -107,17 +137,53 @@ public class OrcamentoApi extends HttpServlet {
                     String sql = "INSERT INTO produtos (nome, materiais, custo, lucro, resposta) VALUES (" +
                                 "'" + nome + "', '" + materiais + "', " + custo + ", " + lucro + ", '" + respostaIA.replace("'", "''") + "')";
                     stmt.executeUpdate(sql);
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                    response.setStatus(500);
+                    JSONObject error = new JSONObject();
+                    error.put("erro", "Erro ao salvar o produto no banco de dados: " + ex.getMessage());
+                    response.getWriter().write(error.toString());
+                    return;
                 } catch (Exception ex) {
-                    ex.printStackTrace(); // só para garantir que erros no banco não travem a API
-}
+                    ex.printStackTrace();
+                    response.setStatus(500);
+                    JSONObject error = new JSONObject();
+                    error.put("erro", "Erro inesperado ao salvar o produto: " + ex.getMessage());
+                    response.getWriter().write(error.toString());
+                    return;
+                }
               
-             }else{
-                 
-                // Obtém parâmetros específicos de serviço
+            } else { // servico
                 String descricao = request.getParameter("descricao");
                 String horas = request.getParameter("horas");
                 String valorHora = request.getParameter("valor_hora");
                 String custosExtras = request.getParameter("custos_extras");
+
+                // Validações dos parâmetros de serviço
+                if (descricao == null || descricao.trim().isEmpty() ||
+                    horas == null || horas.trim().isEmpty() ||
+                    valorHora == null || valorHora.trim().isEmpty() ||
+                    custosExtras == null || custosExtras.trim().isEmpty()) {
+                    response.setStatus(400);
+                    JSONObject error = new JSONObject();
+                    error.put("erro", "Parâmetros obrigatórios de serviço ausentes ou vazios.");
+                    response.getWriter().write(error.toString());
+                    return;
+                }
+                // Validação de tipos numéricos
+                double horasVal, valorHoraVal, custosExtrasVal;
+                try {
+                    horasVal = Double.parseDouble(horas);
+                    valorHoraVal = Double.parseDouble(valorHora);
+                    custosExtrasVal = Double.parseDouble(custosExtras);
+                    if (horasVal < 0 || valorHoraVal < 0 || custosExtrasVal < 0) throw new NumberFormatException();
+                } catch (NumberFormatException ex) {
+                    response.setStatus(400);
+                    JSONObject error = new JSONObject();
+                    error.put("erro", "Horas, valor_hora e custos_extras devem ser números válidos e não negativos.");
+                    response.getWriter().write(error.toString());
+                    return;
+                }
 
                 json.put("tipo", tipo);
                 json.put("descricao", descricao);
@@ -145,23 +211,32 @@ public class OrcamentoApi extends HttpServlet {
                     String sql = "INSERT INTO servicos (descricao, horas, valor_hora, custos_extras, resposta) VALUES (" +
                                 "'" + descricao + "', '" + horas + "', " + valorHora + ", " + custosExtras + ", '" + respostaIA.replace("'", "''") + "')";
                     stmt.executeUpdate(sql);
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                    response.setStatus(500);
+                    JSONObject error = new JSONObject();
+                    error.put("erro", "Erro ao salvar o serviço no banco de dados: " + ex.getMessage());
+                    response.getWriter().write(error.toString());
+                    return;
                 } catch (Exception ex) {
                     ex.printStackTrace();
+                    response.setStatus(500);
+                    JSONObject error = new JSONObject();
+                    error.put("erro", "Erro inesperado ao salvar o serviço: " + ex.getMessage());
+                    response.getWriter().write(error.toString());
+                    return;
                 }
-      
-                }
-             
+            }
 
-                //Cria o JSON de resposta final
-                JSONObject resposta = new JSONObject();
-                resposta.put("resposta", respostaIA);
+            //Cria o JSON de resposta final
+            JSONObject resposta = new JSONObject();
+            resposta.put("resposta", respostaIA);
 
-                //Configuração http e envia resposta
-                response.getWriter().write(resposta.toString());
+            //Configuração http e envia resposta
+            response.getWriter().write(resposta.toString());
                 
-        }catch(Exception e){
-            
-             e.printStackTrace();
+        } catch(Exception e){
+            e.printStackTrace();
 
             //Cria JSON de erro
             JSONObject error = new JSONObject();
