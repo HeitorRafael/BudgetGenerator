@@ -16,6 +16,7 @@
         <link rel="stylesheet" href="style/home.css">
     </head>
     <body>
+        <%@ include file="WEB-INF/jspf/navbar.jspf" %>
 
         <div class="container py-5">
             <div class="row justify-content-center align-items-start">
