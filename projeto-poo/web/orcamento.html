@@ -13,6 +13,15 @@
     
 </head>
 <body>
+    <div id="navbar-container"></div>
+    <script>
+      fetch('navbar.html')
+        .then(res => res.text())
+        .then(html => {
+          document.getElementById('navbar-container').innerHTML = html;
+        });
+    </script>
+
     <div class="container d-flex justify-content-center align-items-center">
         <div class="row w-50 bg-form p-4 shadow rounded">
             <!-- Abas de navegação -->

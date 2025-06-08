@@ -24,7 +24,7 @@
             <% } %>
             <form method="post" action="login.jsp">
                 <div class="mb-3">
-                    <label for="usuario" class="form-label">Usuário</label>
+                    <label for="usuario" class="form-label">UsuÃ¡rio</label>
                     <input type="text" class="form-control" id="usuario" name="usuario" required value="teste">
                 </div>
                 <div class="mb-3">
@@ -45,7 +45,7 @@
             session.setAttribute("usuarioLogado", usuario);
             response.sendRedirect("home.jsp");
         } else {
-            response.sendRedirect("login.jsp?erro=Usuário ou senha inválidos");
+            response.sendRedirect("login.jsp?erro=UsuÃ¡rio ou senha invÃ¡lidos");
         }
     }
 %>

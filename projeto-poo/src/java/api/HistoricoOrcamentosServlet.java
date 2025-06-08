@@ -4,10 +4,9 @@ import dao.OrcamentoDAO;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 import models.Usuario;
-import models.Orcamento;
+import models.orcamento;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
