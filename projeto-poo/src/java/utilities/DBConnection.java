@@ -7,7 +7,7 @@ import java.sql.SQLException;
 public class DBConnection {
 
     // Caminho do banco de dados SQLite
-    private static final String URL = "db/BudgetGenerator.db-journal";
+    private static final String URL = "jdbc:sqlite:web/WEB-INF/data/BudgetGenerator.db-journal";
 
     public static Connection conectar() throws SQLException {
         try {

@@ -76,7 +76,7 @@ public class AuthServlet extends HttpServlet {
             if (usuario != null && verifyPassword(password, usuario.getSenha())) {
                 HttpSession session = request.getSession();
                 session.setAttribute("usuario", usuario);
-                response.sendRedirect("home.jsp");
+                response.sendRedirect("home.html");
                 return;
             }
         } catch (SQLException e) {
@@ -118,23 +118,38 @@ public class AuthServlet extends HttpServlet {
 
         UsuarioDAO usuarioDAO = new UsuarioDAO();
         try {
-            if (usuarioDAO.buscarPorEmail(email) != null) {
+            // DEBUG: Verificar se email já existe
+            Usuario usuarioExistente = usuarioDAO.buscarPorEmail(email);
+            if (usuarioExistente != null) {
                 request.setAttribute("error", "Este email já está registrado.");
                 request.getRequestDispatcher("index.html").forward(request, response);
                 return;
             }
 
-            // Gera o hash da senha antes de salvar
+            // Gerar hash da senha
             String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
+
+            // Criar usuário
             Usuario novoUsuario = new Usuario(name, email, hashedPassword);
+
+            // Inserir no banco de dados
             usuarioDAO.inserir(novoUsuario);
 
-            // Cria sessão e redireciona para home.jsp após registro bem-sucedido
+            // Criar sessão
             HttpSession session = request.getSession();
             session.setAttribute("usuario", novoUsuario);
-            response.sendRedirect("home.jsp");
+
+            // Redirecionar para home.jsp
+            response.sendRedirect("home.html");
         } catch (SQLException e) {
+            // DEBUG: Erro SQL
+            e.printStackTrace();
             request.setAttribute("error", "Erro interno no servidor durante o registro.");
+            request.getRequestDispatcher("index.html").forward(request, response);
+        } catch (Exception e) {
+            // DEBUG: Outros erros
+            e.printStackTrace();
+            request.setAttribute("error", "Erro interno no servidor.");
             request.getRequestDispatcher("index.html").forward(request, response);
         }
     }
