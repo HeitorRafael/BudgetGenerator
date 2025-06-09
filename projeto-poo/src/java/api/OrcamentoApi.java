@@ -1,18 +1,19 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
+
 package api;
 
+import java.sql.Connection;
+import java.sql.Statement;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.io.BufferedReader;
+import jakarta.servlet.http.HttpSession;
 import org.json.JSONObject;
+import utilities.DBConnection;
 
 /**
  *
@@ -61,6 +62,10 @@ public class OrcamentoApi extends HttpServlet {
             //Criação de um objeto json com os dados recebidos
              JSONObject json = new JSONObject();
              
+             
+             //string que vai ser montada com o prompt
+             String respostaIA = "";
+             
              //Monta o prompt especifico para o tipo do formulario
              String prompt;
              if("produto".equals(tipo)){
@@ -77,12 +82,31 @@ public class OrcamentoApi extends HttpServlet {
                 
                 // Prompt para produtos
                 prompt = 
-                "Você é um assistente que cria orçamentos para PRODUTOS. Gere um orçamento com:\n\n" +
-                "Nome do produto: " + nome + "\n" +
-                "Materiais utilizados: " + materiais + "\n" +
-                "Custo de produção: R$" + custo + "\n" +
-                "Margem de lucro desejada: " + lucro + "%\n\n" +
-                "Calcule o preço final de venda e explique o cálculo.";
+                "Você é um assistente especializado em orçamentos de PRODUTOS. Com base nas informações a seguir, gere um orçamento detalhado, estruturado em tópicos:\n\n" +
+                "1. Nome do produto: " + nome + "\n" +
+                "2. Materiais utilizados: " + materiais + "\n" +
+                "   - Pesquise o preço médio de mercado de cada material listado.\n" +
+                "3. Custo de produção informado: R$" + custo + "\n" +
+                "4. Margem de lucro desejada: " + lucro + "%\n\n" +
+                "Objetivo:\n" +
+                "- Liste cada material com seu preço médio estimado.\n" +
+                "- Calcule o custo total real considerando os materiais.\n" +
+                "- Aplique a margem de lucro sobre o custo total e forneça o preço final sugerido de venda.\n\n" +
+                "Formato da resposta: utilize listas e subtítulos, evite parágrafos longos, e explique brevemente o cálculo final.";
+                
+                respostaIA = GeminiAPIClient.enviarPrompt(prompt);
+                
+                //Conexão com o banco SQlite
+                try (Connection conn = DBConnection.conectar();
+                    Statement stmt = conn.createStatement()) {
+
+                    //Inserção dos dados do formulario de Produto
+                    String sql = "INSERT INTO produtos (nome, materiais, custo, lucro, resposta) VALUES (" +
+                                "'" + nome + "', '" + materiais + "', " + custo + ", " + lucro + ", '" + respostaIA.replace("'", "''") + "')";
+                    stmt.executeUpdate(sql);
+                } catch (Exception ex) {
+                    ex.printStackTrace(); // só para garantir que erros no banco não travem a API
+}
               
              }else{
                  
@@ -100,16 +124,30 @@ public class OrcamentoApi extends HttpServlet {
 
                 // Prompt para serviços
                 prompt = 
-                "Você é um assistente que cria orçamentos para SERVIÇOS. Gere um orçamento com:\n\n" +
+                "Você é um assistente que cria orçamentos para SERVIÇOS. Gere um orçamento com base nas seguintes informações:\n\n" +
                 "Descrição do serviço: " + descricao + "\n" +
                 "Tempo estimado: " + horas + " horas\n" +
                 "Valor por hora: R$" + valorHora + "\n" +
                 "Custos extras: R$" + custosExtras + "\n\n" +
-                "Calcule o valor total e explique o cálculo.";
+                "Se aplicável, considere custos indiretos típicos (como transporte, ferramentas, equipamentos, etc) para o tipo de serviço descrito, com valores aproximados de mercado.\n" +
+                "Calcule o valor total do serviço considerando todos os custos e explique brevemente como chegou ao valor.";
+
+                respostaIA = GeminiAPIClient.enviarPrompt(prompt);
+                
+                //Conexão com o banco SQlite
+                try (Connection conn = DBConnection.conectar();
+                    Statement stmt = conn.createStatement()) {
+
+                    //Inserção dos dados do formulario de Serviços
+                    String sql = "INSERT INTO servicos (descricao, horas, valor_hora, custos_extras, resposta) VALUES (" +
+                                "'" + descricao + "', '" + horas + "', " + valorHora + ", " + custosExtras + ", '" + respostaIA.replace("'", "''") + "')";
+                    stmt.executeUpdate(sql);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
       
-             }
+                }
              
-                String respostaIA = GeminiAPIClient.enviarPrompt(prompt);
 
                 //Cria o JSON de resposta final
                 JSONObject resposta = new JSONObject();
@@ -117,6 +155,7 @@ public class OrcamentoApi extends HttpServlet {
 
                 //Configuração http e envia resposta
                 response.getWriter().write(resposta.toString());
+                
         }catch(Exception e){
             
              e.printStackTrace();
