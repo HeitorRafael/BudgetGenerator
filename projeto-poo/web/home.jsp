@@ -22,6 +22,7 @@
     <link rel="stylesheet" href="style/styleHistorico.css">
 </head>
 <body>
+     <%@ include file="WEB-INF/jspf/navbar.jspf" %>
             <nav class="navbar navbar-expand-lg navbar-dark bg-dark m-4">
           <div class="container-fluid">
             <a class="navbar-brand" href="home.jsp">
