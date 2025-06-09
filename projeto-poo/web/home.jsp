@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="api.User" %>
+<%@ page import="models.Usuario" %>
 <%
     // Verifica se o usuário está logado
     Object usuarioObj = session.getAttribute("loggedInUser");
@@ -9,7 +9,7 @@
     }
     // Supondo que seu objeto seja User ou Usuario
     // Ajuste o cast conforme sua classe de usuário
-    User usuario = (User) usuarioObj;
+    Usuario usuario = (Usuario) usuarioObj;
 %>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -26,10 +26,9 @@
         <div class="row justify-content-center align-items-start">
             <div class="col-md-6">
                 <div class="logo mb-3">
-                    <img src="<%= usuario.getFotoPerfil() != null ? usuario.getFotoPerfil() : "https://via.placeholder.com/200x250" %>" alt="Foto do Usuário" style="max-width:200px;">
                 </div>
                 <div class="main-title mt-3">HOME</div>
-                <h5 class="mt-3 fw-bold"><%= usuario.getName() %></h5>
+                <h5 class="mt-3 fw-bold"><%= usuario.getNome() %></h5>
                 <p class="text-white"><%= usuario.getEmail() %></p>
                 <nav class="mt-4">
                     <span class="text-white">•</span>
