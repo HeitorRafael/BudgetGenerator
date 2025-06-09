@@ -1,6 +1,7 @@
 
 package api;
 
+import java.sql.PreparedStatement;
 import java.sql.Connection;
 import java.sql.Statement;
 import java.sql.DriverManager;
@@ -98,15 +99,19 @@ public class OrcamentoApi extends HttpServlet {
                 
                 //Conexão com o banco SQlite
                 try (Connection conn = DBConnection.conectar();
-                    Statement stmt = conn.createStatement()) {
+                    PreparedStatement stmt = conn.prepareStatement(
+                        "INSERT INTO produtos (nome, materiais, custo, lucro, resposta) VALUES (?, ?, ?, ?, ?)")) {
 
-                    //Inserção dos dados do formulario de Produto
-                    String sql = "INSERT INTO produtos (nome, materiais, custo, lucro, resposta) VALUES (" +
-                                "'" + nome + "', '" + materiais + "', " + custo + ", " + lucro + ", '" + respostaIA.replace("'", "''") + "')";
-                    stmt.executeUpdate(sql);
+                   stmt.setString(1, nome);
+                   stmt.setString(2, materiais);
+                   stmt.setDouble(3, Double.parseDouble(custo));
+                   stmt.setDouble(4, Double.parseDouble(lucro));
+                   stmt.setString(5, respostaIA);
+
+                   stmt.executeUpdate();
                 } catch (Exception ex) {
-                    ex.printStackTrace(); // só para garantir que erros no banco não travem a API
-}
+                    ex.printStackTrace();
+                }
               
              }else{
                  
@@ -136,12 +141,16 @@ public class OrcamentoApi extends HttpServlet {
                 
                 //Conexão com o banco SQlite
                 try (Connection conn = DBConnection.conectar();
-                    Statement stmt = conn.createStatement()) {
+                    PreparedStatement stmt = conn.prepareStatement(
+                        "INSERT INTO servicos (descricao, horas, valor_hora, custos_extras, resposta) VALUES (?, ?, ?, ?, ?)")) {
 
-                    //Inserção dos dados do formulario de Serviços
-                    String sql = "INSERT INTO servicos (descricao, horas, valor_hora, custos_extras, resposta) VALUES (" +
-                                "'" + descricao + "', '" + horas + "', " + valorHora + ", " + custosExtras + ", '" + respostaIA.replace("'", "''") + "')";
-                    stmt.executeUpdate(sql);
+                   stmt.setString(1, descricao);
+                   stmt.setInt(2, Integer.parseInt(horas));
+                   stmt.setDouble(3, Double.parseDouble(valorHora));
+                   stmt.setDouble(4, Double.parseDouble(custosExtras));
+                   stmt.setString(5, respostaIA);
+
+                   stmt.executeUpdate();
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
