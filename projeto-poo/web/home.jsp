@@ -16,13 +16,14 @@
         <link rel="stylesheet" href="style/home.css">
     </head>
     <body>
+        <%@ include file="WEB-INF/jspf/navbar.jspf" %>
 
         <div class="container py-5">
             <div class="row justify-content-center align-items-start">
                 <!-- Coluna esquerda -->
                 <div class="col-md-6">
                     <div class="logo mb-3">
-                        <img src="caminho/para/seu-logo.png" alt="Logo do site">
+                        <img src="img/logo.png">
                     </div>
                     <div class="main-title mt-3">HOME</div>
                     <nav class="mt-4">

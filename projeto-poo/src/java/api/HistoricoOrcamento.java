@@ -4,7 +4,7 @@ import dao.OrcamentoDAO;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 import models.Usuario;
-import models.orcamento;
+import models.Orcamento;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.util.List;
 
 @WebServlet("/HistoricoOrcamentos")
-public class HistoricoOrcamentosServlet extends HttpServlet {
+public class HistoricoOrcamento extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("application/json");

@@ -83,3 +83,32 @@ body {
     background-color: #dc3545;
     color: #fff;
 }
+
+.navbar {
+    margin-bottom: 32px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    z-index: 1000;
+}
+
+.navbar .navbar-brand img {
+    filter: drop-shadow(0 1px 2px #0008);
+}
+
+.navbar .nav-link {
+    color: #fff !important;
+    font-weight: 500;
+    margin-right: 10px;
+    transition: color 0.2s;
+}
+
+.navbar .nav-link:hover {
+    color: #ff5252 !important;
+}
+
+.navbar-toggler {
+    border: none;
+}
+
+.navbar-toggler:focus {
+    box-shadow: none;
+}

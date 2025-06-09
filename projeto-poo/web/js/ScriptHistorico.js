@@ -18,112 +18,113 @@ async function carregarHistoricoOrcamentos(pagina) {
     mensagemVazio.style.display = 'none';
     paginacaoContainer.innerHTML = '';
 
-    // Simulação de dados de orçamentos
-    const historicoOrcamentosSimulado = [
+    // Simulação de dados conforme as tabelas do banco (produtos e servicos), sem o campo id
+    const historicoProdutos = [
         {
-            budget_id: 'orcamento-hist-1',
-            nome_orcamento: 'Orçamento Web Design',
-            data_criacao: '2025-05-15T14:30:00Z',
-            detalhes: { valor_total: 2500.00, observacao: 'Criação de website responsivo com 5 páginas.', cliente: 'Empresa ABC', itens: 'Design da página inicial, 5 páginas internas, Otimização SEO básica', status: 'Concluído', vendedor: 'João Silva' }
-            
+            tipo: 'produto',
+            nome: 'Cadeira Gamer',
+            materiais: 'Aço, Espuma, Tecido',
+            custo: 350.00,
+            lucro: 40.0
         },
         {
-            budget_id: 'orcamento-hist-2',
-            nome_orcamento: 'Orçamento Marketing Digital',
-            data_criacao: '2025-05-10T09:00:00Z',
-            detalhes: { valor_total: 1200.50, observacao: 'Campanha de marketing de conteúdo para 3 meses.', cliente: 'Loja XYZ', itens: 'Criação de 10 posts para blog, Gerenciamento de redes sociais (1 plataforma)', status: 'Em andamento', vendedor: 'Maria Oliveira' }
+            tipo: 'produto',
+            nome: 'Mesa Escritório',
+            materiais: 'Madeira, Parafusos',
+            custo: 200.00,
+            lucro: 30.0
+        }
+    ];
+    const historicoServicos = [
+        {
+            tipo: 'servico',
+            descricao: 'Desenvolvimento de Site',
+            horas: '20',
+            valor_hora: 80.00,
+            custos_extras: 150.00
         },
         {
-            budget_id: 'orcamento-hist-3',
-            nome_orcamento: 'Consultoria de TI',
-            data_criacao: '2025-05-05T16:45:00Z',
-            detalhes: { valor_total: 800.00, observacao: 'Análise de infraestrutura de rede e segurança.', cliente: 'Startup Tech', itens: 'Diagnóstico de rede, Relatório de vulnerabilidades, Recomendações de melhoria', status: 'Aguardando aprovação', vendedor: 'Carlos Souza' }
-        },
-        {
-            budget_id: 'orcamento-hist-4',
-            nome_orcamento: 'Desenvolvimento Mobile App',
-            data_criacao: '2025-04-28T10:15:00Z',
-            detalhes: { valor_total: 7500.00, observacao: 'Criação de aplicativo para iOS e Android.', cliente: 'Food Delivery Ltda.', itens: 'Design UI/UX, Desenvolvimento de backend, Integração com API de pagamentos', status: 'Em desenvolvimento', vendedor: 'Ana Paula' }
-        },
-        {
-            budget_id: 'orcamento-hist-5',
-            nome_orcamento: 'Manutenção de Servidores',
-            data_criacao: '2025-04-20T11:00:00Z',
-            detalhes: { valor_total: 600.00, observacao: 'Manutenção preventiva mensal de 2 servidores.', cliente: 'DataCenter Solutions', itens: 'Verificação de logs, Atualização de software, Otimização de desempenho', status: 'Concluído', vendedor: 'Roberto Costa' }
-        },
-        {
-            budget_id: 'orcamento-hist-6',
-            nome_orcamento: 'Criação de Conteúdo',
-            data_criacao: '2025-04-12T14:00:00Z',
-            detalhes: { valor_total: 950.00, observacao: 'Produção de 5 artigos para blog e 10 posts para redes sociais.', cliente: 'Blog de Viagens', itens: 'Pesquisa de palavras-chave, Escrita e revisão, Otimização para SEO', status: 'Aguardando revisão', vendedor: 'Fernanda Lima' }
+            tipo: 'servico',
+            descricao: 'Consultoria Financeira',
+            horas: '10',
+            valor_hora: 120.00,
+            custos_extras: 0.00
         }
     ];
 
-    historicoTotal = historicoOrcamentosSimulado;
+    // Junta os dois tipos para exibir no histórico
+    historicoTotal = [...historicoProdutos, ...historicoServicos];
 
     const startIndex = (pagina - 1) * itensPorPagina;
     const endIndex = startIndex + itensPorPagina;
     const orcamentosPagina = historicoTotal.slice(startIndex, endIndex);
 
     if (orcamentosPagina.length > 0) {
-        orcamentosPagina.forEach(orcamento => {
-            const listItem = criarItemOrcamento(orcamento);
+        orcamentosPagina.forEach((orcamento, idx) => {
+            const uniqueId = `${orcamento.tipo}-${pagina}-${idx}`;
+            const listItem = criarItemOrcamento(orcamento, uniqueId);
             listaOrcamentos.appendChild(listItem);
         });
+        adicionarListenersVisualizar();
         renderizarPaginacao(historicoTotal.length, itensPorPagina, pagina);
     } else if (pagina === 1) {
         mensagemVazio.style.display = 'block';
     }
 }
 
-function criarItemOrcamento(orcamento) {
+function criarItemOrcamento(orcamento, uniqueId) {
     const listItem = document.createElement('li');
     listItem.classList.add('item-orcamento');
 
-    listItem.innerHTML = `
-        <div class="nome-orcamento">${orcamento.nome_orcamento || 'Orçamento sem nome'}</div>
-        <div class="data-criacao">Criado em: ${formatarData(orcamento.data_criacao)}</div>
-        <div class="acoes-orcamento">
-            <button onclick="toggleDetalhes('${orcamento.budget_id}')">Visualizar</button>
-            <button onclick="excluirOrcamento('${orcamento.budget_id}')">Excluir</button>
-        </div>
-        <div class="detalhes-expandidos" id="detalhes-${orcamento.budget_id}">
-            <p><strong>Valor Total:</strong> R$ ${orcamento.detalhes ? orcamento.detalhes.valor_total.toFixed(2) : 'N/A'}</p>
-            <p><strong>Observação:</strong> ${orcamento.detalhes ? orcamento.detalhes.observacao : 'N/A'}</p>
-            <p><strong>Cliente:</strong> ${orcamento.detalhes ? orcamento.detalhes.cliente : 'N/A'}</p>
-            <p><strong>Itens:</strong> ${orcamento.detalhes ? orcamento.detalhes.itens : 'N/A'}</p>
-            <p><strong>Status:</strong> ${orcamento.detalhes ? orcamento.detalhes.status : 'N/A'}</p>
-            <p><strong>Vendedor:</strong> ${orcamento.detalhes ? orcamento.detalhes.vendedor : 'N/A'}</p>
-        </div>
-    `;
-
+    if (orcamento.tipo === 'produto') {
+        listItem.innerHTML = `
+            <div class="nome-orcamento"><strong>Produto:</strong> ${orcamento.nome}</div>
+            <div class="acoes-orcamento">
+                <button type="button" class="btn-visualizar" data-uid="${uniqueId}">Visualizar</button>
+            </div>
+            <div class="detalhes-expandidos" id="detalhes-${uniqueId}">
+                <p><strong>Materiais:</strong> ${orcamento.materiais}</p>
+                <p><strong>Custo:</strong> R$ ${orcamento.custo.toFixed(2)}</p>
+                <p><strong>Lucro (%):</strong> ${orcamento.lucro}</p>
+            </div>
+        `;
+    } else if (orcamento.tipo === 'servico') {
+        listItem.innerHTML = `
+            <div class="nome-orcamento"><strong>Serviço:</strong> ${orcamento.descricao}</div>
+            <div class="acoes-orcamento">
+                <button type="button" class="btn-visualizar" data-uid="${uniqueId}">Visualizar</button>
+            </div>
+            <div class="detalhes-expandidos" id="detalhes-${uniqueId}">
+                <p><strong>Horas:</strong> ${orcamento.horas}</p>
+                <p><strong>Valor Hora:</strong> R$ ${orcamento.valor_hora.toFixed(2)}</p>
+                <p><strong>Custos Extras:</strong> R$ ${orcamento.custos_extras.toFixed(2)}</p>
+            </div>
+        `;
+    }
+    // Garante que os detalhes começam ocultos
+    setTimeout(() => {
+        const detalhes = listItem.querySelector('.detalhes-expandidos');
+        if (detalhes) detalhes.style.display = 'none';
+    }, 0);
     return listItem;
 }
 
-function formatarData(dataISO) {
-    const data = new Date(dataISO);
-    const dia = String(data.getDate()).padStart(2, '0');
-    const mes = String(data.getMonth() + 1).padStart(2, '0');
-    const ano = data.getFullYear();
-    const hora = String(data.getHours()).padStart(2, '0');
-    const minuto = String(data.getMinutes()).padStart(2, '0');
-    return `${dia}/${mes}/${ano} ${hora}:${minuto}`;
-}
-
-function toggleDetalhes(orcamentoId) {
-    // Esconde todos os outros elementos de detalhes
-    const todosDetalhes = document.querySelectorAll('.detalhes-expandidos');
-    todosDetalhes.forEach(detalhe => {
-        if (detalhe.id !== `detalhes-${orcamentoId}`) {
-            detalhe.style.display = 'none';
-        }
+// Adiciona o event listener após renderizar os itens
+function adicionarListenersVisualizar() {
+    const botoes = document.querySelectorAll('.btn-visualizar');
+    botoes.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const uid = this.getAttribute('data-uid');
+            const detalhes = document.getElementById(`detalhes-${uid}`);
+            if (!detalhes) return;
+            // Fecha todos os outros
+            document.querySelectorAll('.detalhes-expandidos').forEach(div => {
+                if (div !== detalhes) div.style.display = 'none';
+            });
+            // Alterna o clicado
+            detalhes.style.display = detalhes.style.display === 'block' ? 'none' : 'block';
+        });
     });
-
-    // Depois, mostra ou oculta o detalhe do orçamento clicado
-    const detalhesDiv = document.getElementById(`detalhes-${orcamentoId}`);
-    if (detalhesDiv) {
-        detalhesDiv.style.display = detalhesDiv.style.display === 'none' ? 'block' : 'none';
-    }
 }
 
 function excluirOrcamento(orcamentoId) {
