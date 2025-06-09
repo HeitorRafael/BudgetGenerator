@@ -23,6 +23,7 @@
     <link rel="stylesheet" href="style/styleHistorico.css">
 </head>
 <body>
+
      <%@ include file="WEB-INF/jspf/navbar.jspf" %>
 
     <div class="container py-5">
@@ -41,6 +42,25 @@
                 </nav>
             </div>
         </div>
+
+                <div class="row mt-5">
+            <div class="col-12">
+                <div id="historico-main-section">
+                    <h3 class="mb-4 text-center">Histórico de Orçamentos</h3>
+                    <div id="historico-orcamentos-container" class="d-flex flex-row flex-wrap justify-content-center">
+                        <ul class="lista-orcamentos" id="lista-de-orcamentos">
+                            </ul>
+                    </div>
+                    <p id="mensagem-vazio" class="alert-info text-center" style="display:none;">Nenhum orçamento encontrado.</p>
+                    <div id="paginacao-historico" class="mt-3 text-center">
+                        </div>
+                </div>
+            </div>
+        </div>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/ScriptHistorico.js"></script>
+        
 </body>
 </html>
