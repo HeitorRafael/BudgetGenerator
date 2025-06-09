@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
 <%@ page import="models.Usuario" %>
 <%
     // Verifica se o usuário está logado
@@ -23,26 +24,7 @@
 </head>
 <body>
      <%@ include file="WEB-INF/jspf/navbar.jspf" %>
-            <nav class="navbar navbar-expand-lg navbar-dark bg-dark m-4">
-          <div class="container-fluid">
-            <a class="navbar-brand" href="home.jsp">
-              <img src="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/icons/house-fill.svg" alt="Home" width="30" height="30" class="d-inline-block align-top">
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-              <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-              <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                  <a class="nav-link" href="orcamento.html">Gerar Orçamento</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="index.html">Sair</a>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </nav>
+
     <div class="container py-5">
         <div class="row justify-content-center align-items-start">
             <div class="col-md-6">
