@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
 <%@ page import="models.Usuario" %>
 <%
     // Verifica se o usuário está logado
@@ -22,6 +23,8 @@
     <link rel="stylesheet" href="style/styleHistorico.css">
 </head>
 <body>
+     <%@ include file="WEB-INF/jspf/navbar.jspf" %>
+
     <div class="container py-5">
         <div class="row justify-content-center align-items-start">
             <div class="col-md-6">
